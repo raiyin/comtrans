@@ -1,0 +1,49 @@
+version: "3"
+services:
+
+  db:
+    image: postgres:13-alpine
+    container_name: db
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./db/scripts:/docker-entrypoint-initdb.d
+      - ./db/datasets:/datasets
+    ports:
+      - 6543:5432
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: events
+    healthcheck:
+      test: pg_isready -U postgres -d events
+      interval: 1s
+      timeout: 500ms
+      start_period: 0s
+      retries: 3
+    restart: unless-stopped
+
+  app:
+    build: ./backend
+    container_name: app
+    ports:
+      - 8080:8080
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+    depends_on:
+      db:
+        condition: service_healthy
+
+  ui:
+    build: ./frontend
+    container_name: ui
+    ports:
+      - 5000:80
+    links:
+      - app
+
+volumes:
+  db-data:

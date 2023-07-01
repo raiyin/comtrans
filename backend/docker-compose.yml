@@ -1,0 +1,11 @@
+version: '3.5'
+services:
+  UserService:
+   image: ${DOCKER_REGISTRY-}usersmicroservice:v1
+   build:
+    context: ./UserMicroservice
+    dockerfile: Dockerfile
+   environment:
+    - CONNECTIONSTRINGS__DEFAULTCONNECTION=Data Source=192.168.42.245,1433;Initial Catalog=UserServiceDB;User Id=******;Password=******
+   ports:
+    - "4202:80"
