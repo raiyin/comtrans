@@ -1,4 +1,5 @@
 version: "3"
+name: comtrans
 services:
 
   db:
@@ -14,7 +15,7 @@ services:
       POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: events
+      POSTGRES_DB: users
     healthcheck:
       test: pg_isready -U postgres -d events
       interval: 1s
@@ -36,6 +37,16 @@ services:
     depends_on:
       db:
         condition: service_healthy
+
+  usermicroservice:
+   image: ${DOCKER_REGISTRY-}usersmicroservice:v1
+   build:
+    context: ./UserMicroservice
+    dockerfile: Dockerfile
+   environment:
+    - CONNECTIONSTRINGS__DEFAULTCONNECTION=Data Source=192.168.42.245,1433;Initial Catalog=UserServiceDB;User Id=******;Password=******
+   ports:
+    - "4202:80"
 
   ui:
     build: ./frontend
