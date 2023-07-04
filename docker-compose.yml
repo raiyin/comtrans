@@ -1,10 +1,10 @@
-version: "3"
+version: "3.8"
 name: comtrans
 services:
 
   db:
     image: postgres:13-alpine
-    container_name: db
+    container_name: ctdb
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./db/scripts:/docker-entrypoint-initdb.d
@@ -26,7 +26,7 @@ services:
 
   app:
     build: ./backend
-    container_name: app
+    container_name: ctback
     ports:
       - 8080:8080
     environment:
@@ -48,13 +48,13 @@ services:
    ports:
     - "4202:80"
 
-  ui:
-    build: ./frontend
-    container_name: ui
+  ctwebui:
+    build: ./client/ctwebclient
+    container_name: ctwebui
     ports:
       - 5000:80
-    links:
-      - app
+    # links:
+      # - app
 
 volumes:
   db-data:
