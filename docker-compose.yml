@@ -38,15 +38,19 @@ services:
       db:
         condition: service_healthy
 
-  usermicroservice:
-   image: ${DOCKER_REGISTRY-}usersmicroservice:v1
-   build:
-    context: ./UserMicroservice
-    dockerfile: Dockerfile
+  userservice:
+  #  image: userservice
+  #  image: ${DOCKER_REGISTRY-}userservice:latest
+   image: userservice:latest
+   container_name: userservice
+  #  build:
+  #   context: ./services/user/UserMicroservice
+  #   dockerfile: Dockerfile
+  #  build: ./services/user/UserMicroservice
    environment:
-    - CONNECTIONSTRINGS__DEFAULTCONNECTION=Data Source=192.168.42.245,1433;Initial Catalog=UserServiceDB;User Id=******;Password=******
+    - CONNECTIONSTRINGS__DEFAULTCONNECTION=Data Source=192.168.0.109,1433;Initial Catalog=UserServiceDB;User Id=******;Password=******
    ports:
-    - "4202:80"
+    - "8080:80"
 
   ctwebui:
     build: ./client/ctwebclient
