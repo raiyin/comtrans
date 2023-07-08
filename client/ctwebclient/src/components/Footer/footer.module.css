@@ -1,6 +1,5 @@
 .footer {
     height: 80px;
-    border: 1px solid black;
     display: flex;
     justify-content: space-around;
     font-family: roboto;
@@ -10,5 +9,3 @@
 .footer__logo a {
     text-decoration: none;
 }
-
-.footer__social {}

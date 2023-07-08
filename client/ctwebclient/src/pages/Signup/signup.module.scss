@@ -1,11 +1,11 @@
-.register {
+.signup {
     flex: 1 1 auto;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.register-form {
+.signup-form {
     height: 400px;
     width: 340px;
     background: #fff;
@@ -15,7 +15,7 @@
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
 }
 
-.register-form__header {
+.signup-form__header {
     display: block;
     font-family: roboto;
     font-weight: 700;
@@ -26,6 +26,6 @@
     padding-bottom: 26px;
 }
 
-.register-form__item {
+.signup-form__item {
     margin-bottom: 40px;
 }
