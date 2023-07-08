@@ -2,17 +2,18 @@ import React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { AppBar, Box, Button, IconButton, InputBase, ThemeProvider, Toolbar, Typography, alpha, createTheme, styled } from '@mui/material';
+import { Navigate, useNavigate } from 'react-router';
 
-const navItems = ['Home', 'About', 'Contact'];
+const navItems = ['contact', 'login', 'signup'];
 
 const Header = () => {
 
+    const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
     };
-
 
     const darkTheme = createTheme({
         palette: {
@@ -86,14 +87,6 @@ const Header = () => {
                         COMTRANS
                     </Typography>
 
-                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        {navItems.map((item) => (
-                            <Button key={item} sx={{ color: '#fff' }}>
-                                {item}
-                            </Button>
-                        ))}
-                    </Box>
-
                     <Search>
                         <SearchIconWrapper>
                             <SearchIcon />
@@ -103,6 +96,18 @@ const Header = () => {
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </Search>
+
+                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        {navItems.map((item: string) => (
+                            <Button
+                                key={item}
+                                sx={{ color: '#fff' }}
+                                onClick={() => navigate(item)}
+                            >
+                                {item}
+                            </Button>
+                        ))}
+                    </Box>
 
                 </Toolbar>
             </AppBar>

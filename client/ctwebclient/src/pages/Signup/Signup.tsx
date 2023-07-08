@@ -1,9 +1,9 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import cl from './register.module.scss';
+import cl from './signup.module.scss';
 import { Button, TextField } from '@mui/material';
 
-const Registration = () => {
+const Signup = () => {
     const {
         register,
         handleSubmit,
@@ -16,14 +16,14 @@ const Registration = () => {
 
     return (
 
-        <div className={cl['register']} >
+        <div className={cl['signup']} >
 
-            <form onSubmit={handleSubmit(onSubmit)} className={cl['register-form']}>
-                <span className={cl['register-form__header']}>
+            <form onSubmit={handleSubmit(onSubmit)} className={cl['signup-form']}>
+                <span className={cl['signup-form__header']}>
                     Welcome
                 </span>
 
-                <div className={cl['register-form__item']}>
+                <div className={cl['signup-form__item']}>
                     <TextField
                         sx={{ width: '300px' }}
                         id={`email`}
@@ -32,7 +32,7 @@ const Registration = () => {
                         {...register(`email`, { required: true })} />
                 </div>
 
-                <div className={cl['register-form__item']}>
+                <div className={cl['signup-form__item']}>
                     <TextField
                         sx={{ width: '300px' }}
                         id={`password`}
@@ -42,7 +42,7 @@ const Registration = () => {
                         {...register(`password`, { required: true })} />
                 </div>
 
-                <div className={cl['register-form__item']}>
+                <div className={cl['signup-form__item']}>
                     <TextField
                         sx={{ width: '300px' }}
                         id={`password`}
@@ -55,7 +55,7 @@ const Registration = () => {
                 <Button
                     variant="outlined"
                 >
-                    Registration
+                    Sign up
                 </Button>
                 <br />
                 <div style={{ color: 'red' }}>
@@ -67,4 +67,4 @@ const Registration = () => {
     );
 };
 
-export default Registration;
+export default Signup;
