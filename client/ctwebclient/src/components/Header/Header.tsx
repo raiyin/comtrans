@@ -1,10 +1,7 @@
 import React from 'react';
-import cl from './header.module.css';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { AppBar, Box, Button, IconButton, InputBase, ThemeProvider, Toolbar, Typography, alpha, createTheme, styled } from '@mui/material';
-
-
 
 const navItems = ['Home', 'About', 'Contact'];
 
@@ -56,7 +53,6 @@ const Header = () => {
         color: 'inherit',
         '& .MuiInputBase-input': {
             padding: theme.spacing(1, 1, 1, 0),
-            // vertical padding + font size from searchIcon
             paddingLeft: `calc(1em + ${theme.spacing(4)})`,
             transition: theme.transitions.create('width'),
             width: '100%',
@@ -111,16 +107,6 @@ const Header = () => {
                 </Toolbar>
             </AppBar>
         </ThemeProvider>
-        // <div className={cl.header}>
-        //     <div className={cl['header__logo']}>
-        //         COMTRANS
-        //     </div>
-        //     <div className={cl['header__links']}></div>
-        //     <div className={cl['header__search']}>
-
-        //     </div>
-        //     <div className={cl['header__comein']}></div>
-        // </div>
     );
 };
 
