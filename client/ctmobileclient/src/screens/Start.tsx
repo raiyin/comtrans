@@ -1,18 +1,12 @@
 import React from 'react';
-import type { PropsWithChildren } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
     StyleSheet,
-    Text,
     useColorScheme,
-    View,
-    Pressable
+    View
 } from 'react-native';
 import { Button } from "@react-native-material/core";
-import Login from './user/login';
+import Login from './Login';
+import Signup from './Signup';
 
 import {
     Colors,
@@ -40,12 +34,29 @@ function App({ navigation }): JSX.Element {
                 }}>
                 <Button
                     variant="outlined"
-                    title="Пользователь"
-                    color="#333"
-                    style={{ alignSelf: "center", marginTop: 'auto', width: 160, height: 40, borderRadius: 5 }}
+                    title="Войти"
                     onPress={() => navigation.navigate('Login')}
+                    style={{
+                        backgroundColor: "#ddd",
+                        alignSelf: "center",
+                        marginTop: 'auto',
+                        width: 160,
+                        height: 40,
+                        borderRadius: 5
+                    }}
                 />
-                <Button variant="outlined" title="Водитель" color="#333" style={{ alignSelf: "center", marginTop: 'auto', width: 160, height: 40, borderRadius: 5 }} />
+                <Button
+                    variant="outlined"
+                    title="Зарегистрироваться"
+                    onPress={() => navigation.navigate('Signup')}
+                    style={{
+                        backgroundColor: "#ddd",
+                        alignSelf: "center",
+                        marginTop: 'auto',
+                        width: 160,
+                        height: 40,
+                        borderRadius: 5
+                    }} />
             </View>
 
         </View>
