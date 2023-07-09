@@ -34,7 +34,7 @@ function App({ navigation }): JSX.Element {
                 }}>
                 <Button
                     variant="outlined"
-                    title="Войти"
+                    title="Log in"
                     onPress={() => navigation.navigate('Login')}
                     style={{
                         backgroundColor: "#ddd",
@@ -47,7 +47,7 @@ function App({ navigation }): JSX.Element {
                 />
                 <Button
                     variant="outlined"
-                    title="Зарегистрироваться"
+                    title="Sign up"
                     onPress={() => navigation.navigate('Signup')}
                     style={{
                         backgroundColor: "#ddd",

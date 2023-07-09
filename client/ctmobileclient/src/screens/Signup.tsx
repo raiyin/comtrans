@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Stack, TextInput } from '@react-native-material/core';
+
 const Signup = (): JSX.Element => {
     return (
 
