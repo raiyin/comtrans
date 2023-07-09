@@ -1,18 +1,13 @@
-import React from 'react'
+import React from 'react';
 import {
-    SafeAreaView,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
     useColorScheme,
-    View,
-    Pressable
+    View
 } from 'react-native';
+import Signup from './Signup';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { Button } from "@react-native-material/core";
 
-const Login = () => {
+const Login = ({ navigation }) => {
     const isDarkMode = useColorScheme() === 'dark';
     return (
         <View
@@ -35,11 +30,12 @@ const Login = () => {
                     title="Логин"
                     color="#333"
                     style={{ alignSelf: "center", marginTop: 'auto', width: 160, height: 40, borderRadius: 5 }}
+                    onPress={() => navigation.navigate('Signup')}
                 />
             </View>
 
         </View>
     );
-}
+};
 
-export default Login
+export default Login;
