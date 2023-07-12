@@ -1,8 +1,15 @@
 package com.publicmaders.comtrans
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.IntentSender
+import android.location.LocationRequest
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.IntentSenderRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +21,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -29,11 +37,13 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComTransTheme {
                 // A surface container using the 'background' color from the theme
+                ActivityResultContracts.RequestPermission(permission = Manifest.permission.ACCESS_FINE_LOCATION)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
                     Greeting("Android")
+                    GreetingPreview()
                 }
             }
         }
@@ -51,9 +61,11 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
+
     ComTransTheme {
         Greeting("Android")
     }
+
     val counter = remember { mutableStateOf(0) }
 
     Column(
@@ -75,9 +87,11 @@ fun GreetingPreview() {
                 .align(Alignment.CenterHorizontally),
             onClick = {
                 counter.value++
-            },
+            }
+
         ) {
             Text("Increment", color = Color.White)
         }
     }
 }
+
