@@ -37,7 +37,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComTransTheme {
                 // A surface container using the 'background' color from the theme
-                ActivityResultContracts.RequestPermission(permission = Manifest.permission.ACCESS_FINE_LOCATION)
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
