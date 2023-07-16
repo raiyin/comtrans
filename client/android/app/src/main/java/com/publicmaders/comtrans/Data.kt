@@ -1,4 +1,3 @@
 package com.publicmaders.comtrans
 
-class Data {
-}
+data class LocationDetails(val latitude: Double, val longitude: Double)
