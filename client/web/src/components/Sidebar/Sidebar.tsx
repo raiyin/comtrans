@@ -12,7 +12,7 @@ const Sidebar = () => {
 
     return (
 
-        <section className={cl['sidebar']}>
+        <aside className={cl['sidebar']}>
             <FormControl fullWidth size="small">
                 <InputLabel id="city-label">City</InputLabel>
                 <Select
@@ -27,7 +27,7 @@ const Sidebar = () => {
                     <MenuItem value={30}>Thirty</MenuItem>
                 </Select>
             </FormControl>
-        </section>
+        </aside>
     );
 };
 

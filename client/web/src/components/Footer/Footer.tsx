@@ -13,27 +13,29 @@ const Footer = () => {
 
     return (
 
-        <ThemeProvider theme={darkTheme}>
-            <Paper square>
-                <div className={cl.footer}>
-                    <div className={cl['footer__logo']}>
-                        © COMTRANS - 2023
+        <footer>
+            <ThemeProvider theme={darkTheme}>
+                <Paper square>
+                    <div className={cl.footer}>
+                        <div className={cl['footer__logo']}>
+                            © COMTRANS - 2023
+                        </div>
+                        <div className={cl['footer__social']}>
+                            <Link href="mailto:raiyin@ya.ru" underline="always">
+                                <EmailIcon sx={{ fontSize: 30, mr: 1 }} />
+                            </Link>
+                            <Link href="https://t.me/my_important_talks" underline="always">
+                                <TelegramIcon sx={{ fontSize: 30, mr: 1 }} />
+                            </Link>
+                            <Link href="https://publicmaders.ru" underline="always">
+                                <LinkIcon sx={{ fontSize: 30 }} />
+                            </Link>
+                        </div>
                     </div>
-                    <div className={cl['footer__social']}>
-                        <Link href="mailto:raiyin@ya.ru" underline="always">
-                            <EmailIcon sx={{ fontSize: 30, mr: 1 }} />
-                        </Link>
-                        <Link href="https://t.me/my_important_talks" underline="always">
-                            <TelegramIcon sx={{ fontSize: 30, mr: 1 }} />
-                        </Link>
-                        <Link href="https://publicmaders.ru" underline="always">
-                            <LinkIcon sx={{ fontSize: 30 }} />
-                        </Link>
-                    </div>
-                </div>
 
-            </Paper>
-        </ThemeProvider>
+                </Paper>
+            </ThemeProvider>
+        </footer>
 
     );
 };

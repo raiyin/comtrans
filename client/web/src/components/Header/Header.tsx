@@ -64,54 +64,59 @@ const Header = () => {
     }));
 
     return (
-        <ThemeProvider theme={darkTheme}>
 
-            <AppBar component="nav">
-                <Toolbar>
+        <header>
 
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2, display: { sm: 'none' } }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+            <ThemeProvider theme={darkTheme}>
 
-                    <Typography
-                        variant="h6"
-                        component="div"
-                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                    >
-                        COMTRANS
-                    </Typography>
+                <AppBar component="nav">
+                    <Toolbar>
 
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </Search>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            edge="start"
+                            onClick={handleDrawerToggle}
+                            sx={{ mr: 2, display: { sm: 'none' } }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
 
-                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                        {navItems.map((item: string) => (
-                            <Button
-                                key={item}
-                                sx={{ color: '#fff' }}
-                                onClick={() => navigate(item)}
-                            >
-                                {item}
-                            </Button>
-                        ))}
-                    </Box>
+                        <Typography
+                            variant="h6"
+                            component="div"
+                            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                        >
+                            COMTRANS
+                        </Typography>
 
-                </Toolbar>
-            </AppBar>
-        </ThemeProvider>
+                        <Search>
+                            <SearchIconWrapper>
+                                <SearchIcon />
+                            </SearchIconWrapper>
+                            <StyledInputBase
+                                placeholder="Search…"
+                                inputProps={{ 'aria-label': 'search' }}
+                            />
+                        </Search>
+
+                        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                            {navItems.map((item: string) => (
+                                <Button
+                                    key={item}
+                                    sx={{ color: '#fff' }}
+                                    onClick={() => navigate(item)}
+                                >
+                                    {item}
+                                </Button>
+                            ))}
+                        </Box>
+
+                    </Toolbar>
+                </AppBar>
+            </ThemeProvider>
+        </header>
+
     );
 };
 
