@@ -1,5 +1,0 @@
-D:\projects\comtrans\client\android\app\src\main\java\com\publicmaders\comtrans\ui\theme\Theme.kt
-D:\projects\comtrans\client\android\app\src\main\java\com\publicmaders\comtrans\Data.kt
-D:\projects\comtrans\client\android\app\src\main\java\com\publicmaders\comtrans\MainActivity.kt
-D:\projects\comtrans\client\android\app\src\main\java\com\publicmaders\comtrans\ui\theme\Type.kt
-D:\projects\comtrans\client\android\app\src\main\java\com\publicmaders\comtrans\ui\theme\Color.kt
