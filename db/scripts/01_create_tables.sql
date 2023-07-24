@@ -1,5 +1,3 @@
--- Create table APPLICATIONS
-
 create TABLE tbl_users
 (
     id   bigint         not null unique primary key,
