@@ -12,3 +12,6 @@
 - **client** - исходный код web- и mobile-клиентов
 - **services** - исходный код сервисов бэкенда (.NET)
 - **db** - БД
+
+# get api
+http://localhost:8080/weatherforecast
