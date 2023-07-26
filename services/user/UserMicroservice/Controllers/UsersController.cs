@@ -5,7 +5,8 @@ using UserMicroservice.Services.Interface;
 
 namespace UserMicroservice.Controllers
 {
-    [Route("api/[controller]")]
+    //[Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
