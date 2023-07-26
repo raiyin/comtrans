@@ -1,13 +1,13 @@
 ﻿{
   "$schema": "https://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:21895",
-      "sslPort": 44310
-    }
-  },
+  //"iisSettings": {
+  //  "windowsAuthentication": false,
+  //  "anonymousAuthentication": true,
+  //  "iisExpress": {
+  //    "applicationUrl": "http://localhost:21895",
+  //    "sslPort": 44310
+  //  }
+  //},
   "profiles": {
     "UserMicroservice": {
       "commandName": "Project",

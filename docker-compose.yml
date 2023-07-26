@@ -18,20 +18,6 @@ services:
       POSTGRES_DB: users
     restart: unless-stopped
 
-  app:
-    build: ./backend
-    container_name: ctback
-    ports:
-      - 8080:8080
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-    depends_on:
-      db:
-        condition: service_healthy
-
   userservice:
    image: userservice:latest
    container_name: userservice

@@ -1,7 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
 
-EXPOSE 443
 EXPOSE 80
 
 # copy project csproj file and restore it in docker directory
