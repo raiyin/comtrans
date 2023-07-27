@@ -4,12 +4,13 @@ services:
 
   db:
     image: postgres:13-alpine
-    container_name: user-db
+    container_name: user_db_server
     volumes:
       - db-data:/var/lib/postgresql/data
       - ./db/scripts:/docker-entrypoint-initdb.d
     ports:
-      - 6543:5432
+      # - 6543:5432
+      - 5432:5432
     environment:
       POSTGRES_HOST_AUTH_METHOD: trust
       POSTGRES_USER: postgres
@@ -17,27 +18,18 @@ services:
       POSTGRES_DB: users
     restart: unless-stopped
 
-  app:
-    build: ./backend
-    container_name: ctback
-    ports:
-      - 8080:8080
-    environment:
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_USER: postgres
-      DB_PASSWORD: postgres
-    depends_on:
-      db:
-        condition: service_healthy
-
   userservice:
    image: userservice:latest
    container_name: userservice
    environment:
-    - CONNECTIONSTRINGS__DEFAULTCONNECTION=Data Source=192.168.0.109,1433;Initial Catalog=UserServiceDB;User Id=******;Password=******
+    DB_HOST: db
+    DB_PORT: 5432
+    DB_USER: postgres
+    DB_PASSWORD: postgres
    ports:
     - "8080:80"
+   depends_on:
+    - db
 
   ctwebui:
     build: ./client/ctwebclient

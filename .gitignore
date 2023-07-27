@@ -1,0 +1,41 @@
+#web
+/client/web/node_modules
+/client/web/.pnp
+/client/web/.pnp.js
+
+#android
+/client/android/ComTrans/.gradle/
+/client/android/ComTrans/build/
+/client/android/ComTrans/local.properties
+/client/android/ComTrans/*.log
+/client/android/ComTrans/captures/
+/client/android/ComTrans/.externalNativeBuild/
+/client/android/ComTrans/.cxx/
+/client/android/ComTrans/*.apk
+/client/android/ComTrans/output.json
+/client/android/ComTrans/*.iml
+/client/android/ComTrans/.idea/
+/client/android/ComTrans/misc.xml
+/client/android/ComTrans/deploymentTargetDropDown.xml
+/client/android/ComTrans/render.experimental.xml
+/client/android/ComTrans/*.jks
+/client/android/ComTrans/*.keystore
+/client/android/ComTrans/google-services.json
+/client/android/ComTrans/*.hprof
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
