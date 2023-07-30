@@ -11,7 +11,7 @@ using UserMicroservice.Data;
 
 namespace UserMicroservice.Migrations
 {
-    [DbContext(typeof(DbContextClass))]
+    [DbContext(typeof(DataContext))]
     [Migration("20230723193532_updateUserAddRole")]
     partial class updateUserAddRole
     {

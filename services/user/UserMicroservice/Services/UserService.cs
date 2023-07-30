@@ -6,9 +6,9 @@ namespace UserMicroservice.Services
 {
     public class UserService : IUserService
     {
-        private readonly DbContextClass _dbContext;
+        private readonly DataContext _dbContext;
 
-        public UserService(DbContextClass dbContext)
+        public UserService(DataContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -22,7 +22,7 @@ namespace UserMicroservice.Services
 
         public bool DeleteUser(int Id)
         {
-            var filteredData = _dbContext.Users.Where(x => x.UserId == Id).FirstOrDefault();
+            var filteredData = _dbContext.Users.Where(x => x.Id == Id).FirstOrDefault();
             var result = _dbContext.Remove(filteredData);
             _dbContext.SaveChanges();
             return result != null ? true : false;
@@ -30,7 +30,7 @@ namespace UserMicroservice.Services
 
         public User GetUserById(int id)
         {
-            return _dbContext.Users.Where(x => x.UserId == id).FirstOrDefault();
+            return _dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
         }
 
         public IEnumerable<User> GetUserList()

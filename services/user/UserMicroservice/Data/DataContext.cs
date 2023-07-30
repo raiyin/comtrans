@@ -3,8 +3,10 @@ using UserMicroservice.Model;
 
 namespace UserMicroservice.Data
 {
-    public class DbContextClass:DbContext
+    public class DataContext:DbContext
     {
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
+
         public DbSet<User> Users { get; set; }
         
         // TODO выцеплять конфигурацию из файла конфигурации
