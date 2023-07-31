@@ -1,8 +1,7 @@
 ﻿using UserMicroservice.Data;
 using UserMicroservice.Model;
-using UserMicroservice.Services.Interface;
 
-namespace UserMicroservice.Services
+namespace UserMicroservice.Services.UserService
 {
     public class UserService : IUserService
     {

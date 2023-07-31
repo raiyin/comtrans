@@ -1,4 +1,5 @@
-﻿using UserMicroservice.Model;
+﻿using UserMicroservice.Dtos.User;
+using UserMicroservice.Model;
 
 namespace UserMicroservice.Services.UserService.UserService
 {
@@ -7,8 +8,6 @@ namespace UserMicroservice.Services.UserService.UserService
         Task<ServiceResponse<List<GetUserDto>>> GetUserList();
 
         Task<ServiceResponse<GetUserDto>> GetUserById(int id);
-
-        Task<SerivceResponse<GetUserDto>> AddUser(AddUserDto newUser);
 
         Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updatedUser);
 
