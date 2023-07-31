@@ -22,7 +22,7 @@ namespace UserMicroservice.Controllers
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
             var response = await _authRepo.Register(
-                new User { UserName = request.Username },
+                new User { Login = request.Username },
                 request.Password
                 );
 
@@ -43,39 +43,6 @@ namespace UserMicroservice.Controllers
                 return BadRequest(response);
             }
             return Ok(response);
-        }
-
-
-
-        [HttpGet]
-        public IEnumerable<User> UserList()
-        {
-            var userList = userService.GetUserList();
-            return userList;
-        }
-
-        [HttpGet("{id}")]
-        public User GetUserById(int id)
-        {
-            return userService.GetUserById(id);
-        }
-
-        [HttpPost]
-        public User AddUser(User user)
-        {
-            return userService.AddUser(user);
-        }
-
-        [HttpPut]
-        public User UpdateUser(User user)
-        {
-            return userService.UpdateUser(user);
-        }
-
-        [HttpDelete("{id}")]
-        public bool DeleteUser(int id)
-        {
-            return userService.DeleteUser(id);
         }
     }
 }

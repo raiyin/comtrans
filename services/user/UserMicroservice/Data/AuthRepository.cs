@@ -72,14 +72,43 @@ namespace UserMicroservice.Data
             return tokenHandler.WriteToken(token);
         }
 
-        Task<ServiceResponse<int>> IAuthRepository.Register(User user, string password)
+        public async Task<ServiceResponse<int>> Register(User user, string password)
         {
-            throw new NotImplementedException();
+            ServiceResponse<int> response = new ServiceResponse<int>();
+            if (await UserExists(user.Login))
+            {
+                response.Success = false;
+                response.Message = "User already exists.";
+                return response;
+            }
+
+            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            response.Data = user.Id;
+            return response;
         }
 
-        Task<bool> IAuthRepository.UserExists(string username)
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            throw new NotImplementedException();
+            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        public async Task<bool> UserExists(string username)
+        {
+            if (await _context.Users.AnyAsync(user => user.Login.ToLower() == username.ToLower()))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
