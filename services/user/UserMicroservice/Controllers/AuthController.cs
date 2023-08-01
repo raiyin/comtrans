@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using UserMicroservice.Data;
 using UserMicroservice.Dtos.User;
 using UserMicroservice.Model;
-using UserMicroservice.Services.Interface;
 
 namespace UserMicroservice.Controllers
 {

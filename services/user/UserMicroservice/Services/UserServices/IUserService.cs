@@ -1,7 +1,7 @@
 ﻿using UserMicroservice.Dtos.User;
 using UserMicroservice.Model;
 
-namespace UserMicroservice.Services.UserService.UserService
+namespace UserMicroservice.Services.UserServices
 {
     public interface IUserService
     {
