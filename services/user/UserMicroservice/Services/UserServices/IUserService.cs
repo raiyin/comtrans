@@ -5,12 +5,12 @@ namespace UserMicroservice.Services.UserServices
 {
     public interface IUserService
     {
-        Task<ServiceResponse<List<GetUserDto>>> GetUserList();
+        async Task<ServiceResponse<List<GetUserDto>>> GetUserList();
 
-        Task<ServiceResponse<GetUserDto>> GetUserById(int id);
+        async Task<ServiceResponse<GetUserDto>> GetUserById(int id);
 
-        Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updatedUser);
+        async Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updatedUser);
 
-        Task<ServiceResponse<GetUserDto>> DeleteUser(int Id);
+        async Task<ServiceResponse<GetUserDto>> DeleteUser(int Id);
     }
 }

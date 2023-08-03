@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using UserMicroservice.Data;
 using UserMicroservice.Dtos.User;
@@ -12,7 +13,7 @@ namespace UserMicroservice.Services.UserServices
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
 
-        public UserService(IMapper mapper, DataContext dbContext, , IHttpContextAccessor httpContextAccessor)
+        public UserService(IMapper mapper, DataContext dbContext, IHttpContextAccessor httpContextAccessor)
         {
             _dbContext = dbContext;
             _httpContextAccessor = httpContextAccessor;
@@ -29,7 +30,7 @@ namespace UserMicroservice.Services.UserServices
             return result.Entity;
         }
 
-        Task<ServiceResponse<GetUserDto>> DeleteUser(int Id)
+        public Task<ServiceResponse<GetUserDto>> DeleteUser(int Id)
         {
             var filteredData = _dbContext.Users.Where(x => x.Id == Id).FirstOrDefault();
             var result = _dbContext.Remove(filteredData);
@@ -47,7 +48,7 @@ namespace UserMicroservice.Services.UserServices
             return _dbContext.Users.ToList();
         }
 
-        async Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updatedUser)
+        public async Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updatedUser)
         {
             ServiceResponse<GetUserDto> response = new ServiceResponse<GetUserDto>();
 
@@ -77,5 +78,6 @@ namespace UserMicroservice.Services.UserServices
 
             return response;
         }
+
     }
 }
