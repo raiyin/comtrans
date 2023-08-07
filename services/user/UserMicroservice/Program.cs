@@ -1,5 +1,6 @@
 using UserMicroservice.Data;
-using UserMicroservice.Services.UserService;
+using UserMicroservice.Services;
+using UserMicroservice.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
 

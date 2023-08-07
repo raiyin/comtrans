@@ -20,9 +20,6 @@ namespace UserMicroservice.Services.UserServices
             _mapper = mapper;
         }
 
-        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User
-            .FindFirstValue(ClaimTypes.NameIdentifier));
-
         public User AddUser(User user)
         {
             var result = _dbContext.Users.Add(user);
@@ -30,22 +27,52 @@ namespace UserMicroservice.Services.UserServices
             return result.Entity;
         }
 
-        public Task<ServiceResponse<GetUserDto>> DeleteUser(int Id)
+        public async Task<ServiceResponse<string>> DeleteUser(int id)
         {
-            var filteredData = _dbContext.Users.Where(x => x.Id == Id).FirstOrDefault();
-            var result = _dbContext.Remove(filteredData);
-            _dbContext.SaveChanges();
-            return result != null ? true : false;
+            ServiceResponse<string> response = new ServiceResponse<string>();
+            try
+            {
+                var user = await _dbContext.Users
+                    .FirstOrDefaultAsync(u => u.Id == id);
+
+                if (user != null)
+                {
+                    _dbContext.Users.Remove(user);
+                    await _dbContext.SaveChangesAsync();
+                    response.Success = true;
+                    response.Message = "User deleted";
+                    response.Data = string.Empty;
+                }
+                else
+                {
+                    response.Success = false;
+                    response.Message = "User not found";
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Success = false;
+                response.Message = ex.Message;
+            }
+            return response;
         }
 
-        public Task<ServiceResponse<GetUserDto>> GetUserById(int id)
+        public async Task<ServiceResponse<GetUserDto>> GetUserById(int id)
         {
-            return _dbContext.Users.Where(x => x.Id == id).FirstOrDefault();
+            var response = new ServiceResponse<GetUserDto>();
+
+            var user = _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+            response.Data = _mapper.Map<GetUserDto>(user);
+            response.Success = true;
+            return response;
         }
 
-        public Task<ServiceResponse<List<GetUserDto>>> GetUserList()
+        public async Task<ServiceResponse<List<GetUserDto>>> GetUserList()
         {
-            return _dbContext.Users.ToList();
+            var response = new ServiceResponse<List<GetUserDto>>();
+            var users = await _dbContext.Users.ToListAsync();
+            response.Data = users.Select(u => _mapper.Map<GetUserDto>(u)).ToList();
+            return response;
         }
 
         public async Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updatedUser)
@@ -56,19 +83,16 @@ namespace UserMicroservice.Services.UserServices
             {
                 var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == updatedUser.Id);
 
-                if (user.Id == GetUserId())
-                {
-                    _mapper.Map(updatedUser, user);
-                    user.Login = updatedUser.Login;
-                    user.Role = updatedUser.Role;
-                    user.Email = updatedUser.Email;
-                    user.Name = updatedUser.Name;
-                    user.LastName = updatedUser.LastName;
-                    user.Enabled = updatedUser.Enabled;
+                _mapper.Map(updatedUser, user);
+                user.Login = updatedUser.Login;
+                user.Role = updatedUser.Role;
+                user.Email = updatedUser.Email;
+                user.Name = updatedUser.Name;
+                user.LastName = updatedUser.LastName;
+                user.Enabled = updatedUser.Enabled;
 
-                    await _dbContext.SaveChangesAsync();
-                    response.Data = _mapper.Map<GetUserDto>(user);
-                }
+                await _dbContext.SaveChangesAsync();
+                response.Data = _mapper.Map<GetUserDto>(user);
             }
             catch (Exception ex)
             {

@@ -46,7 +46,7 @@ namespace UserMicroservice.Data
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA256(passwordSalt))
             {
-                var computeHash = hmac.ComputeHash(Sytem.Text.Encoding.UTF8.GetBytes(password));
+                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computeHash.SequenceEqual(passwordHash);
             }
         }
@@ -58,6 +58,9 @@ namespace UserMicroservice.Data
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.Name)
             };
+
+            SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+                .GetBytes(_configuration.GetSection("AppSettings:Token").Value));
 
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
