@@ -18,6 +18,7 @@ namespace UserMicroservice.Controllers
         }
 
         [HttpGet]
+        [Route("getall")]
         public async Task<ActionResult<ServiceResponse<IEnumerable<GetUserDto>>>> UserList()
         {
             var userList = await _userService.GetUserList();

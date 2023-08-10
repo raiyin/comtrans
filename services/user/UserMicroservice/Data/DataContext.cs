@@ -11,7 +11,7 @@ namespace UserMicroservice.Data
         
         // TODO выцеплять конфигурацию из файла конфигурации
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-           => optionsBuilder.UseNpgsql("Host=user_db_server;Database=users;Username=postgres;Password=postgres;Port=5432");
+           => optionsBuilder.UseNpgsql("Host=localhost;Database=users;Username=postgres;Password=postgres;Port=5432");
         //optionsBuilder.UseNpgsql("Host=postgres;Database=users;Username=postgres;Password=postgres;Port=5432");
     }
 }

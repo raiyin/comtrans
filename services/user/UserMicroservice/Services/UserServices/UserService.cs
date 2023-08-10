@@ -61,7 +61,7 @@ namespace UserMicroservice.Services.UserServices
         {
             var response = new ServiceResponse<GetUserDto>();
 
-            var user = _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
             response.Data = _mapper.Map<GetUserDto>(user);
             response.Success = true;
             return response;

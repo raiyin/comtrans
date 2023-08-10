@@ -21,7 +21,7 @@ namespace UserMicroservice.Controllers
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
             var response = await _authRepo.Register(
-                new User { Login = request.Username },
+                new User { Login = request.Login },
                 request.Password
                 );
 
@@ -36,7 +36,7 @@ namespace UserMicroservice.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<int>>> Login(UserLoginDto request)
         {
-            var response = await _authRepo.Login(request.UserName, request.Password);
+            var response = await _authRepo.Login(request.Login, request.Password);
             if (response.Success)
             {
                 return BadRequest(response);
