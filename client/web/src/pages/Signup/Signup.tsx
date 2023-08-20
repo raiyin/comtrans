@@ -1,24 +1,72 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import cl from './signup.module.scss';
-import { Button, TextField } from '@mui/material';
+import { Button, FormControl, TextField } from '@mui/material';
+import validateEmail from '../../utils/email';
+
 
 const Signup = () => {
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm();
 
+    const [login, setLogin] = useState('');
+    const [wasLoginModified, setWasLoginModified] = useState(false);
 
-    const onSubmit = (data: any) => {
+    const [email, setEmail] = useState('');
+    const [wasEmailModified, setWasEmailModified] = useState(false);
+    const [emailErrorText, setEmailErrorText] = useState('');
+
+    const [password, setPassword] = useState('');
+    const [wasPasswordModified, setWasPasswordModified] = useState(false);
+
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [wasConfirmPasswordModified, setWasConfirmPasswordModified] = useState(false);
+    const [passwordErrorText, setPasswordErrorText] = useState('');
+
+    const loginChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setWasLoginModified(true);
+        setLogin(() => e.target.value);
+    };
+
+    const emailChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setWasEmailModified(true);
+        setEmail(() => e.target.value);
+    };
+
+    const passwordChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setWasPasswordModified(true);
+        setPassword(() => e.target.value);
+    };
+
+    const confirmPasswordChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setWasConfirmPasswordModified(true);
+        setConfirmPassword(() => e.target.value);
+    };
+
+    useEffect(() => {
+        if (wasEmailModified && !validateEmail(email)) {
+            setEmailErrorText(() => 'Please enter a correct email');
+        }
+        else {
+            setEmailErrorText(() => '');
+        }
+    }, [email]);
+
+    useEffect(() => {
+        if (wasConfirmPasswordModified && confirmPassword !== password) {
+            setPasswordErrorText(() => 'Passwords must be equal');
+        }
+        else {
+
+            setPasswordErrorText(() => '');
+        }
+    }, [confirmPassword]);
+
+    const registerUser = (data: any) => {
     };
 
     return (
 
         <div className={cl['signup']} >
 
-            <form onSubmit={handleSubmit(onSubmit)} className={cl['signup-form']}>
+            <FormControl className={cl['signup-form']}>
                 <span className={cl['signup-form__header']}>
                     Welcome
                 </span>
@@ -26,10 +74,27 @@ const Signup = () => {
                 <div className={cl['signup-form__item']}>
                     <TextField
                         sx={{ width: '300px' }}
+                        id={`login`}
+                        label="Login"
+                        variant="outlined"
+                        required
+                        value={login}
+                        helperText={login === "" && wasLoginModified ? 'Empty field!' : ' '}
+                        onChange={loginChangeHandler}
+                    />
+                </div>
+
+                <div className={cl['signup-form__item']}>
+                    <TextField
+                        sx={{ width: '300px' }}
                         id={`email`}
                         label="Email"
                         variant="outlined"
-                        {...register(`email`, { required: true })} />
+                        value={email}
+                        required
+                        helperText={emailErrorText}
+                        onChange={emailChangeHandler}
+                    />
                 </div>
 
                 <div className={cl['signup-form__item']}>
@@ -39,30 +104,36 @@ const Signup = () => {
                         label="Password"
                         type="password"
                         variant="outlined"
-                        {...register(`password`, { required: true })} />
+                        value={password}
+                        required
+                        helperText={password === "" && wasPasswordModified ? 'Empty field!' : ' '}
+                        onChange={passwordChangeHandler}
+                    />
                 </div>
 
                 <div className={cl['signup-form__item']}>
                     <TextField
                         sx={{ width: '300px' }}
-                        id={`password`}
-                        label="Repeat password"
+                        id={`confirm_password`}
+                        label="Confirm password"
                         type="password"
                         variant="outlined"
-                        {...register(`password`, { required: true })} />
+                        value={confirmPassword}
+                        required
+                        helperText={passwordErrorText}
+                        onChange={confirmPasswordChangeHandler}
+                    />
                 </div>
 
                 <Button
                     variant="outlined"
+                    type="submit"
                 >
                     Sign up
                 </Button>
-                <br />
-                <div style={{ color: 'red' }}>
-                    {Object.keys(errors).length > 0 &&
-                        'There are errors, check your console.'}
-                </div>
-            </form>
+
+
+            </FormControl>
         </div >
     );
 };

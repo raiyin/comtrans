@@ -3,8 +3,9 @@ import cl from './map.module.scss';
 
 const Map = () => {
     return (
-
-        <section id='map-test' className={cl['map']}></section>
+        <div>
+            {/* <section id='map-test' className={cl['map']}></section> */}
+        </div>
     );
 };
 
