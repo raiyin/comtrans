@@ -1,5 +1,5 @@
-import * as CurrentUserActionCreators from './currentuser';
+import * as AuthActionCreators from './auth';
 
 export default {
-    ...CurrentUserActionCreators
+    ...AuthActionCreators
 };
