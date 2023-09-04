@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import cl from './signup.module.scss';
 import { Button, FormControl, TextField } from '@mui/material';
 import validateEmail from '../../utils/email';
@@ -59,7 +59,8 @@ const Signup = () => {
         }
     }, [confirmPassword]);
 
-    const registerUser = (data: any) => {
+    const registerUser = (event: React.MouseEvent<HTMLElement>) => {
+        event.preventDefault();
     };
 
     return (
@@ -67,72 +68,69 @@ const Signup = () => {
         <div className={cl['signup']} >
 
             <FormControl className={cl['signup-form']}>
+
                 <span className={cl['signup-form__header']}>
                     Welcome
                 </span>
 
-                <div className={cl['signup-form__item']}>
-                    <TextField
-                        sx={{ width: '300px' }}
-                        id={`login`}
-                        label="Login"
-                        variant="outlined"
-                        required
-                        value={login}
-                        helperText={login === "" && wasLoginModified ? 'Empty field!' : ' '}
-                        onChange={loginChangeHandler}
-                    />
-                </div>
+                <TextField
+                    sx={{ width: '300px', marginTop: '20px' }}
+                    id={`login`}
+                    label="Login"
+                    variant="outlined"
+                    required
+                    size="small"
+                    value={login}
+                    // helperText={login === '' && wasLoginModified ? 'Empty field!' : ' '}
+                    onChange={loginChangeHandler}
+                />
 
-                <div className={cl['signup-form__item']}>
-                    <TextField
-                        sx={{ width: '300px' }}
-                        id={`email`}
-                        label="Email"
-                        variant="outlined"
-                        value={email}
-                        required
-                        helperText={emailErrorText}
-                        onChange={emailChangeHandler}
-                    />
-                </div>
+                <TextField
+                    sx={{ width: '300px', marginTop: '20px' }}
+                    id={`email`}
+                    label="Email"
+                    variant="outlined"
+                    value={email}
+                    size="small"
+                    required
+                    helperText={emailErrorText}
+                    onChange={emailChangeHandler}
+                />
 
-                <div className={cl['signup-form__item']}>
-                    <TextField
-                        sx={{ width: '300px' }}
-                        id={`password`}
-                        label="Password"
-                        type="password"
-                        variant="outlined"
-                        value={password}
-                        required
-                        helperText={password === "" && wasPasswordModified ? 'Empty field!' : ' '}
-                        onChange={passwordChangeHandler}
-                    />
-                </div>
+                <TextField
+                    sx={{ width: '300px', marginTop: '20px' }}
+                    id={`password`}
+                    label="Password"
+                    type="password"
+                    variant="outlined"
+                    value={password}
+                    size="small"
+                    required
+                    // helperText={password === "" && wasPasswordModified ? 'Empty field!' : ' '}
+                    onChange={passwordChangeHandler}
+                />
 
-                <div className={cl['signup-form__item']}>
-                    <TextField
-                        sx={{ width: '300px' }}
-                        id={`confirm_password`}
-                        label="Confirm password"
-                        type="password"
-                        variant="outlined"
-                        value={confirmPassword}
-                        required
-                        helperText={passwordErrorText}
-                        onChange={confirmPasswordChangeHandler}
-                    />
-                </div>
+                <TextField
+                    sx={{ width: '300px', marginTop: '20px' }}
+                    id={`confirm_password`}
+                    label="Confirm password"
+                    type="password"
+                    variant="outlined"
+                    value={confirmPassword}
+                    size="small"
+                    required
+                    helperText={passwordErrorText}
+                    onChange={confirmPasswordChangeHandler}
+                />
 
                 <Button
+                    sx={{ marginTop: '20px' }}
                     variant="outlined"
                     type="submit"
+                    onClick={(event) => registerUser(event)}
                 >
                     Sign up
                 </Button>
-
-
             </FormControl>
         </div >
     );
