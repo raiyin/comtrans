@@ -20,13 +20,6 @@ namespace UserMicroservice.Services.UserServices
             _mapper = mapper;
         }
 
-        public User AddUser(User user)
-        {
-            var result = _dbContext.Users.Add(user);
-            _dbContext.SaveChanges();
-            return result.Entity;
-        }
-
         public async Task<ServiceResponse<string>> DeleteUser(int id)
         {
             ServiceResponse<string> response = new ServiceResponse<string>();

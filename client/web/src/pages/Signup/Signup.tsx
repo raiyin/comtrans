@@ -2,6 +2,8 @@ import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
 import cl from './signup.module.scss';
 import { Button, FormControl, TextField } from '@mui/material';
 import validateEmail from '../../utils/email';
+import { RegisterData } from '../../types/auth';
+import { register } from '../../utils/requests';
 
 
 const Signup = () => {
@@ -61,13 +63,34 @@ const Signup = () => {
 
     const registerUser = (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
+        const registerData: RegisterData = {
+            login, password, email
+        };
+
+        try {
+            register(registerData);
+        }
+        catch (error) {
+            console.log(error);
+            alert('user not registered');
+            return;
+        }
+        alert('user registered');
     };
 
     return (
 
         <div className={cl['signup']} >
 
-            <FormControl className={cl['signup-form']}>
+            <FormControl className={cl['signup-form']}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    padding: '20px'
+                }}
+            >
 
                 <span className={cl['signup-form__header']}>
                     Welcome
@@ -81,7 +104,6 @@ const Signup = () => {
                     required
                     size="small"
                     value={login}
-                    // helperText={login === '' && wasLoginModified ? 'Empty field!' : ' '}
                     onChange={loginChangeHandler}
                 />
 
@@ -131,6 +153,7 @@ const Signup = () => {
                 >
                     Sign up
                 </Button>
+
             </FormControl>
         </div >
     );

@@ -75,7 +75,7 @@ namespace UserMicroservice.Data
             return tokenHandler.WriteToken(token);
         }
 
-        public async Task<ServiceResponse<int>> Register(User user, string password)
+        public async Task<ServiceResponse<int>> Register(User user, string password, string email)
         {
             ServiceResponse<int> response = new ServiceResponse<int>();
             if (await UserExists(user.Login))
@@ -89,6 +89,8 @@ namespace UserMicroservice.Data
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+            user.CreatedAt = DateTime.UtcNow;
+            user.Email = email;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();

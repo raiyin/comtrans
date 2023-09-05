@@ -6,6 +6,12 @@ export interface AuthState {
     isLoading: boolean;
 }
 
+export interface RegisterData {
+    login: string;
+    password: string;
+    email: string;
+}
+
 export enum AuthActionTypes {
     SET_CURRENT_USER = 'SET_CURRENT_USER',
 }

@@ -22,7 +22,8 @@ namespace UserMicroservice.Controllers
         {
             var response = await _authRepo.Register(
                 new User { Login = request.Login },
-                request.Password
+                request.Password,
+                request.Email
                 );
 
             if (!response.Success)
