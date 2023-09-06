@@ -10,7 +10,7 @@ using UserMicroservice.Data;
 
 namespace UserMicroservice.Migrations
 {
-    [DbContext(typeof(DbContextClass))]
+    [DbContext(typeof(DataContext))]
     [Migration("20230706192816_Initial")]
     partial class Initial
     {

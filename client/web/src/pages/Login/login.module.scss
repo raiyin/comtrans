@@ -6,12 +6,14 @@
 }
 
 .login-form {
-    height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 340px;
     background: #fff;
     border-radius: 10px;
     overflow: hidden;
-    padding: 77px 55px 33px;
+    padding: 10px 10px 20px;
     box-shadow: 0 5px 10px 0 rgba(0, 0, 0, .1);
 }
 
@@ -23,9 +25,5 @@
     color: #333;
     line-height: 1.2;
     text-align: center;
-    padding-bottom: 26px;
-}
-
-.login-form__item {
-    margin-bottom: 40px;
+    margin-top: 20px;
 }

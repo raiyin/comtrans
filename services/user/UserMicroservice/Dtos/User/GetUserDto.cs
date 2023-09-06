@@ -1,8 +1,8 @@
-﻿using System.Formats.Asn1;
+﻿using UserMicroservice.Model;
 
-namespace UserMicroservice.Model
+namespace UserMicroservice.Dtos.User
 {
-    public class User
+    public class GetUserDto
     {
         public int Id { get; set; }
         public string? Name { get; set; }

@@ -21,40 +21,37 @@ const Login = () => {
 
         <div className={cl['login']} >
 
-            <form onSubmit={handleSubmit(onSubmit)} className={cl['login-form']}>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className={cl['login-form']}>
+
                 <span className={cl['login-form__header']}>
                     Welcome
                 </span>
 
-                <div className={cl['login-form__item']}>
-                    <TextField
-                        sx={{ width: '300px' }}
-                        id={`email`}
-                        label="Email"
-                        variant="outlined"
-                        {...register(`email`, { required: true })} />
-                </div>
+                <TextField
+                    sx={{ width: '300px', marginTop: '20px' }}
+                    id={`email`}
+                    label="Email"
+                    variant="outlined"
+                    size="small"
+                    {...register(`email`, { required: true })} />
 
-                <div className={cl['login-form__item']}>
-                    <TextField
-                        sx={{ width: '300px' }}
-                        id={`password`}
-                        label="Password"
-                        type="password"
-                        variant="outlined"
-                        {...register(`password`, { required: true })} />
-                </div>
+                <TextField
+                    sx={{ width: '300px', marginTop: '20px' }}
+                    id={`password`}
+                    label="Password"
+                    type="password"
+                    variant="outlined"
+                    size="small"
+                    {...register(`password`, { required: true })} />
 
                 <Button
+                    sx={{ marginTop: '20px' }}
                     variant="outlined"
                 >
                     Login
                 </Button>
-                <br />
-                <div style={{ color: 'red' }}>
-                    {Object.keys(errors).length > 0 &&
-                        'There are errors, check your console.'}
-                </div>
             </form>
         </div >
 

@@ -1,0 +1,47 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using UserMicroservice.Dtos.User;
+using UserMicroservice.Model;
+using UserMicroservice.Services;
+using UserMicroservice.Services.UserServices;
+
+namespace UserMicroservice.Controllers
+{
+    [Route("[controller]")]
+    [ApiController]
+    public class UserController : ControllerBase
+    {
+        private readonly IUserService _userService;
+
+        public UserController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
+        [HttpGet]
+        [Route("getall")]
+        public async Task<ActionResult<ServiceResponse<IEnumerable<GetUserDto>>>> UserList()
+        {
+            var userList = await _userService.GetUserList();
+            return Ok(userList);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> GetUserById(int id)
+        {
+            return Ok(await _userService.GetUserById(id));
+        }
+
+
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<GetUserDto>>> UpdateUser(UpdateUserDto user)
+        {
+            return Ok(await _userService.UpdateUser(user));
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<bool>>> DeleteUser(int id)
+        {
+            return Ok(await _userService.DeleteUser(id));
+        }
+    }
+}
