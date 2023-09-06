@@ -13,7 +13,7 @@ builder.Services.AddCors(options =>
         {
             //policy.WithOrigins("http://localhost:3000",
             //    "https://localhost:7121/auth/register");
-            policy.WithOrigins("*");
+            policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
         });
 });
 
@@ -41,8 +41,10 @@ app.UseSwagger();
 app.UseSwaggerUI();
 //}
 
-app.UseCors(MyAllowSpecificOrigins);
 //app.UseHttpsRedirection();
+app.UseRouting();
+app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthorization();
+
 app.MapControllers();
 app.Run();

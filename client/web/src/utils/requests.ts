@@ -8,6 +8,7 @@ export const register = async (registerData: RegisterData) => {
     const requestURL = `${proto}${domain}:${port}/auth/register`;
     const request = new Request(requestURL, {
         method: 'POST',
+        mode: 'cors',
         headers: {
             'Content-Type': 'application/json',
             'Access-Control-Request-Method': 'POST',
