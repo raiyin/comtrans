@@ -1,6 +1,7 @@
-import React, { ChangeEvent, MouseEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import cl from './signup.module.scss';
-import { Button, FormControl, TextField } from '@mui/material';
+import { Alert, Button, FormControl, Snackbar, TextField } from '@mui/material';
 import validateEmail from '../../utils/email';
 import { RegisterData } from '../../types/auth';
 import { register } from '../../utils/requests';
@@ -22,6 +23,12 @@ const Signup = () => {
     const [wasConfirmPasswordModified, setWasConfirmPasswordModified] = useState(false);
     const [passwordErrorText, setPasswordErrorText] = useState('');
 
+    const [alertOpenState, setAlertOpenState] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
+    const navigate = useNavigate();
+
+
     const loginChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setWasLoginModified(true);
         setLogin(() => e.target.value);
@@ -40,6 +47,13 @@ const Signup = () => {
     const confirmPasswordChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setWasConfirmPasswordModified(true);
         setConfirmPassword(() => e.target.value);
+    };
+
+    const onAlertSnackbarClose = (_event?: SyntheticEvent | Event, reason?: string) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setAlertOpenState(false);
     };
 
     useEffect(() => {
@@ -61,21 +75,33 @@ const Signup = () => {
         }
     }, [confirmPassword]);
 
-    const registerUser = (event: React.MouseEvent<HTMLElement>) => {
+    const openAlert = () => {
+        setAlertOpenState(true);
+    };
+
+    const clearFields = () => {
+        setLogin('');
+        setEmail('');
+        setPassword('');
+        setConfirmPassword('');
+    };
+
+    const registerUser = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
         const registerData: RegisterData = {
             login, password, email
         };
 
-        try {
-            register(registerData);
-        }
-        catch (error) {
-            console.log(error);
-            alert('user not registered');
+        const result = await register(registerData);
+
+        if (!result) {
+            setAlertMessage(() => 'Ошибка регистрации пользователя.');
+            openAlert();
             return;
         }
-        alert('user registered');
+
+        clearFields();
+        navigate('/', { replace: true });
     };
 
     return (
@@ -155,6 +181,19 @@ const Signup = () => {
                 </Button>
 
             </FormControl>
+
+            <Snackbar
+                open={alertOpenState}
+                autoHideDuration={4000}
+                onClose={onAlertSnackbarClose}>
+                <Alert
+                    onClose={onAlertSnackbarClose}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}>
+                    {alertMessage}
+                </Alert>
+            </Snackbar>
         </div >
     );
 };
