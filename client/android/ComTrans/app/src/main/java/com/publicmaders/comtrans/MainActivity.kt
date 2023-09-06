@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -36,10 +37,20 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
     )
 }
 
+@Composable
+fun ButtonWithElevation(s: String) {
+    Button(onClick = {
+        //your onclick code here
+    }) {
+        Text(text = "Button with elevation")
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     ComTransTheme {
         Greeting("Android")
+        ButtonWithElevation("My Button")
     }
 }
