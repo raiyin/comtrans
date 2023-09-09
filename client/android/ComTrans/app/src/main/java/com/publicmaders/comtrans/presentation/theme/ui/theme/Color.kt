@@ -1,4 +1,4 @@
-package com.publicmaders.comtrans.ui.theme
+package com.publicmaders.comtrans.presentation.theme.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

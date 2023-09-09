@@ -19,10 +19,10 @@ namespace UserMicroservice.Data
             _configuration = configuration;
         }
 
-        public async Task<ServiceResponse<string>> Login(string username, string password)
+        public async Task<ServiceResponse<string>> Login(string email, string password)
         {
             var response = new ServiceResponse<string>();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Name.ToLower().Equals(username.ToLower()));
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
 
             if (user == null)
             {
