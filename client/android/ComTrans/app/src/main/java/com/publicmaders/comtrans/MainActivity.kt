@@ -36,6 +36,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.publicmaders.comtrans.presentation.theme.ui.theme.ComTransTheme
 import com.google.android.gms.location.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : ComponentActivity() {
     private var locationCallback: LocationCallback? = null
@@ -59,7 +64,6 @@ class MainActivity : ComponentActivity() {
                     locationCallback = object : LocationCallback() {
                         override fun onLocationResult(p0: LocationResult) {
                             for (lo in p0.locations) {
-                                // Update UI with location data
                                 currentLocation = LocationDetails(lo.latitude, lo.longitude)
                             }
                         }
@@ -96,6 +100,7 @@ class MainActivity : ComponentActivity() {
                                 }) {
                                 // Get the location
                                 startLocationUpdates()
+                                postData(currentLocation.latitude, currentLocation.longitude);
                             } else {
                                 launcherMultiplePermissions.launch(permissions)
                             }
@@ -154,6 +159,27 @@ class MainActivity : ComponentActivity() {
     override fun onPause() {
         super.onPause()
         locationCallback?.let { fusedLocationClient?.removeLocationUpdates(it) }
+    }
+
+    private fun postData(latitude: Double, longitude: Double) {
+
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://myserver.ru")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val retrofitAPI = retrofit.create(RetrofitAPI::class.java)
+
+        val locationDetails: LocationDetails = LocationDetails(latitude, longitude)
+        val call: Call<LocationDetails?>? = retrofitAPI.postData(locationDetails)
+
+        call!!.enqueue(object : Callback<LocationDetails?> {
+            override fun onResponse(call: Call<LocationDetails?>?, response: Response<LocationDetails?>) {
+                Toast.makeText(this@MainActivity, "Data added to API", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onFailure(call: Call<LocationDetails?>?, t: Throwable) {
+            }
+        })
     }
 }
 
