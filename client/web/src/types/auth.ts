@@ -12,6 +12,11 @@ export interface RegisterData {
     email: string;
 }
 
+export interface LoginData {
+    email: string;
+    password: string;
+}
+
 export enum AuthActionTypes {
     SET_CURRENT_USER = 'SET_CURRENT_USER',
 }
