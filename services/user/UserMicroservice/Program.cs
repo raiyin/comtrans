@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using UserMicroservice.Data;
 using UserMicroservice.Services;
+using UserMicroservice.Services.MailService;
 using UserMicroservice.Services.UserServices;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
@@ -21,6 +22,14 @@ builder.Services.AddCors(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddDbContext<DataContext>();
 //builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+var emailConfig=builder.Configuration
+    .GetSection("EmailConfiguration")
+    .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
+
 builder.Services.AddControllers();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

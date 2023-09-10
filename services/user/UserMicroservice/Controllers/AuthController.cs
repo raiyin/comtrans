@@ -8,7 +8,7 @@ namespace UserMicroservice.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : Controller
     {
         private readonly IAuthRepository _authRepo;
 
@@ -31,6 +31,7 @@ namespace UserMicroservice.Controllers
                 return BadRequest(response);
             }
 
+
             return Ok(response);
         }
 
@@ -42,7 +43,20 @@ namespace UserMicroservice.Controllers
             {
                 return BadRequest(response);
             }
+
+            CookieOptions options = new CookieOptions();
+            options.HttpOnly = true;
+            options.Expires = DateTime.Now.AddDays(30);
+            Response.Cookies.Append("refreshToken", response.Data, options);
+
             return Ok(response);
         }
+
+        [HttpPost("activate")]
+        public async Task<ActionResult<ServiceResponse<int>>> Activate(UserActivateDto request)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

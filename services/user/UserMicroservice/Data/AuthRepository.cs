@@ -5,6 +5,7 @@ using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 using UserMicroservice.Model;
+using UserMicroservice.Services.MailService;
 
 namespace UserMicroservice.Data
 {
@@ -12,11 +13,43 @@ namespace UserMicroservice.Data
     {
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IEmailSender _emailSender;
 
-        public AuthRepository(DataContext context, IConfiguration configuration)
+        public AuthRepository(DataContext context, IConfiguration configuration, IEmailSender emailSender)
         {
             _context = context;
             _configuration = configuration;
+            _emailSender = emailSender;
+        }
+
+        public async Task<ServiceResponse<int>> Register(User user, string password, string email)
+        {
+            ServiceResponse<int> response = new ServiceResponse<int>();
+            if (await UserExists(user.Login))
+            {
+                response.Success = false;
+                response.Message = "User already exists.";
+                return response;
+            }
+
+            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+            user.CreatedAt = DateTime.UtcNow;
+            user.Email = email;
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            var message = new Message(
+                user.Email, 
+                "Verification email", 
+                "verificationlink"
+                );
+            _emailSender.SendEmail(message);
+
+
+            response.Data = user.Id;
+            return response;
         }
 
         public async Task<ServiceResponse<string>> Login(string email, string password)
@@ -40,6 +73,11 @@ namespace UserMicroservice.Data
                 response.Data = CreateToken(user);
             }
             return response;
+        }
+
+        public async Task<ServiceResponse<int>> Activate(string link)
+        {
+            throw new NotImplementedException();
         }
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
@@ -75,28 +113,6 @@ namespace UserMicroservice.Data
             return tokenHandler.WriteToken(token);
         }
 
-        public async Task<ServiceResponse<int>> Register(User user, string password, string email)
-        {
-            ServiceResponse<int> response = new ServiceResponse<int>();
-            if (await UserExists(user.Login))
-            {
-                response.Success = false;
-                response.Message = "User already exists.";
-                return response;
-            }
-
-            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-            user.CreatedAt = DateTime.UtcNow;
-            user.Email = email;
-
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
-            response.Data = user.Id;
-            return response;
-        }
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
