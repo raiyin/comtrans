@@ -6,10 +6,12 @@ namespace UserMicroservice.Services.MailService
     public class EmailSender : IEmailSender
     {
         private readonly EmailConfiguration _emailConfig;
+        private readonly IConfiguration _config;
 
-        public EmailSender(EmailConfiguration emailConfig)
+        public EmailSender(EmailConfiguration emailConfig, IConfiguration config)
         {
             _emailConfig = emailConfig;
+            _config = config;
         }
 
         public void SendEmail(Message message)
@@ -50,13 +52,12 @@ namespace UserMicroservice.Services.MailService
                 {
                     client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
-                    client.Authenticate(_emailConfig.UserName, _emailConfig.Password);
+                    client.Authenticate(_emailConfig.UserName, _config["mail:password"]);
 
                     client.Send(mailMessage);
                 }
                 catch
                 {
-                    //log an error message or throw an exception or both.
                     throw;
                 }
                 finally
