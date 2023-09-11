@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography.X509Certificates;
 using UserMicroservice.Model;
 using UserMicroservice.Services.MailService;
+using Org.BouncyCastle.Asn1.Ocsp;
+using System.Security.Cryptography;
 
 namespace UserMicroservice.Data
 {
@@ -22,7 +24,7 @@ namespace UserMicroservice.Data
             _emailSender = emailSender;
         }
 
-        public async Task<ServiceResponse<int>> Register(User user, string password, string email)
+        public async Task<ServiceResponse<int>> Register(User user, string password, string email, string hostValue)
         {
             ServiceResponse<int> response = new ServiceResponse<int>();
             if (await UserExists(user.Login))
@@ -32,6 +34,8 @@ namespace UserMicroservice.Data
                 return response;
             }
 
+            var randomString = CreatePRGActivationLink();
+            string activationLink = $"https://{hostValue}/auth/activate/{randomString}";
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
@@ -39,7 +43,7 @@ namespace UserMicroservice.Data
             user.Email = email;
             user.Activated = false;
             user.ActivationLinkSendData = DateTime.UtcNow;
-            user.ActivationLink = "";
+            user.ActivationString = randomString;
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -47,10 +51,9 @@ namespace UserMicroservice.Data
             var message = new Message(
                 user.Email,
                 "Verification email",
-                "verificationlink"
+                activationLink
                 );
             _emailSender.SendEmail(message);
-
 
             response.Data = user.Id;
             return response;
@@ -117,7 +120,6 @@ namespace UserMicroservice.Data
             return tokenHandler.WriteToken(token);
         }
 
-
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
@@ -134,6 +136,12 @@ namespace UserMicroservice.Data
                 return true;
             }
             return false;
+        }
+
+        private string CreatePRGActivationLink()
+        {
+            var randomString = Convert.ToBase64String(RandomNumberGenerator.GetBytes(100));
+            return randomString;
         }
     }
 }

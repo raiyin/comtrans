@@ -9,8 +9,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowedOriginsForCors,
         policy =>
-        {            
-            //policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+        {
             policy.WithOrigins(builder.Configuration["AllowedHosts"]).AllowAnyMethod().AllowAnyHeader();
         });
 });
@@ -33,7 +32,12 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-var app = builder.Build();
+var app = builder.Build(); 
+ICollection<string> urls;
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    urls = app.Urls;
+});
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())

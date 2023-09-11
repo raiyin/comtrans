@@ -19,11 +19,12 @@ namespace UserMicroservice.Controllers
 
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
-        {
+        {            
             var response = await _authRepo.Register(
                 new User { Login = request.Login },
                 request.Password,
-                request.Email
+                request.Email,
+                Request.Host.Value
                 );
 
             if (!response.Success)
