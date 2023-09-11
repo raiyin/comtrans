@@ -37,12 +37,16 @@ namespace UserMicroservice.Data
             user.PasswordSalt = passwordSalt;
             user.CreatedAt = DateTime.UtcNow;
             user.Email = email;
+            user.Activated = false;
+            user.ActivationLinkSendData = DateTime.UtcNow;
+            user.ActivationLink = "";
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
             var message = new Message(
-                user.Email, 
-                "Verification email", 
+                user.Email,
+                "Verification email",
                 "verificationlink"
                 );
             _emailSender.SendEmail(message);

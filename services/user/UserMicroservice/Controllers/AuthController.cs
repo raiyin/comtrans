@@ -31,7 +31,6 @@ namespace UserMicroservice.Controllers
                 return BadRequest(response);
             }
 
-
             return Ok(response);
         }
 

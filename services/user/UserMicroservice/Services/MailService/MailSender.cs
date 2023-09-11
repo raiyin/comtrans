@@ -50,10 +50,10 @@ namespace UserMicroservice.Services.MailService
             {
                 try
                 {
+                    // Паполь берется из предварительно сконфигурированного secret stotage.
                     client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.Authenticate(_emailConfig.UserName, _config["mail:password"]);
-
                     client.Send(mailMessage);
                 }
                 catch

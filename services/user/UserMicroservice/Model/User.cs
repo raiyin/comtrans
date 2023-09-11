@@ -14,5 +14,8 @@ namespace UserMicroservice.Model
         public DateTime CreatedAt { get; set; }
         public bool Enabled { get; set; }
         public Role Role { get; set; } = Role.User;
+        public bool Activated { get; set; } = false;
+        public string? ActivationLink { get; set; } = string.Empty;
+        public DateTime ActivationLinkSendData { get; set; }
     }
 }

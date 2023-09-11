@@ -1,24 +1,20 @@
-using Microsoft.EntityFrameworkCore;
 using UserMicroservice.Data;
-using UserMicroservice.Services;
 using UserMicroservice.Services.MailService;
 using UserMicroservice.Services.UserServices;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
 
+var allowedOriginsForCors = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddPolicy(name: allowedOriginsForCors,
         policy =>
-        {
-            //policy.WithOrigins("http://localhost:3000",
-            //    "https://localhost:7121/auth/register");
-            policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+        {            
+            //policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+            policy.WithOrigins(builder.Configuration["AllowedHosts"]).AllowAnyMethod().AllowAnyHeader();
         });
 });
 
-// Add services to the container.
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddDbContext<DataContext>();
 
@@ -27,7 +23,6 @@ var emailConfig = builder.Configuration
     .Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
-
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -49,7 +44,7 @@ app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors(allowedOriginsForCors);
 app.UseAuthorization();
 
 app.MapControllers();
