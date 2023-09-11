@@ -3,6 +3,8 @@ using UserMicroservice.Services.MailService;
 using UserMicroservice.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddDebug();
 
 var allowedOriginsForCors = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>

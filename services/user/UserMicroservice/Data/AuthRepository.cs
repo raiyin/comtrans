@@ -16,12 +16,14 @@ namespace UserMicroservice.Data
         private readonly DataContext _context;
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
+        private readonly ILogger _logger;
 
-        public AuthRepository(DataContext context, IConfiguration configuration, IEmailSender emailSender)
+        public AuthRepository(DataContext context, IConfiguration configuration, IEmailSender emailSender, ILogger<AuthRepository> logger)
         {
             _context = context;
             _configuration = configuration;
             _emailSender = emailSender;
+            _logger = logger;
         }
 
         public async Task<ServiceResponse<int>> Register(User user, string password, string email, string hostValue)
@@ -65,6 +67,7 @@ namespace UserMicroservice.Data
                 response.Data = 0;
                 response.Message = "The error has occured while user creating";
                 response.Success = false;
+                _logger.LogInformation(ex.Message);
             }
 
             return response;
