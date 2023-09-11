@@ -34,28 +34,39 @@ namespace UserMicroservice.Data
                 return response;
             }
 
-            var randomString = CreatePRGActivationLink();
-            string activationLink = $"https://{hostValue}/auth/activate/{randomString}";
-            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-            user.CreatedAt = DateTime.UtcNow;
-            user.Email = email;
-            user.Activated = false;
-            user.ActivationLinkSendData = DateTime.UtcNow;
-            user.ActivationString = randomString;
+            try
+            {
+                var randomString = CreatePRGActivationLink();
+                string activationLink = $"https://{hostValue}/auth/activate/{randomString}";
+                CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+                user.PasswordHash = passwordHash;
+                user.PasswordSalt = passwordSalt;
+                user.CreatedAt = DateTime.UtcNow;
+                user.Email = email;
+                user.Activated = false;
+                user.ActivationLinkSendData = DateTime.UtcNow;
+                user.ActivationString = randomString;
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+                _context.Users.Add(user);
+                await _context.SaveChangesAsync();
 
-            var message = new Message(
-                user.Email,
-                "Verification email",
-                activationLink
-                );
-            _emailSender.SendEmail(message);
+                var message = new Message(
+                    user.Email,
+                    "Verification email",
+                    activationLink
+                    );
+                _emailSender.SendEmail(message);
 
-            response.Data = user.Id;
+                response.Data = user.Id;
+            }
+            catch (Exception ex)
+            {
+                // TODO delete user from db if user was added, but problem was with email
+                response.Data = 0;
+                response.Message = "The error has occured while user creating";
+                response.Success = false;
+            }
+
             return response;
         }
 
