@@ -8,7 +8,7 @@ namespace UserMicroservice.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class AuthController : ControllerBase
+    public class AuthController : Controller
     {
         private readonly IAuthRepository _authRepo;
 
@@ -19,11 +19,12 @@ namespace UserMicroservice.Controllers
 
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
-        {
+        {            
             var response = await _authRepo.Register(
                 new User { Login = request.Login },
                 request.Password,
-                request.Email
+                request.Email,
+                Request.Host.Value
                 );
 
             if (!response.Success)
@@ -42,6 +43,24 @@ namespace UserMicroservice.Controllers
             {
                 return BadRequest(response);
             }
+
+            CookieOptions options = new CookieOptions();
+            options.HttpOnly = true;
+            options.Expires = DateTime.Now.AddDays(30);
+            Response.Cookies.Append("refreshToken", response.Data, options);
+
+            return Ok(response);
+        }
+
+        [HttpGet("activate/{activationString}")]
+        public async Task<ActionResult<ServiceResponse<int>>> Activate(string activationString)
+        {
+            var response = await _authRepo.Activate(activationString);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
             return Ok(response);
         }
     }

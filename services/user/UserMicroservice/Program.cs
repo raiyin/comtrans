@@ -1,29 +1,31 @@
-using Microsoft.EntityFrameworkCore;
 using UserMicroservice.Data;
-using UserMicroservice.Services;
+using UserMicroservice.Services.MailService;
 using UserMicroservice.Services.UserServices;
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddDebug();
 
+var allowedOriginsForCors = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddPolicy(name: allowedOriginsForCors,
         policy =>
         {
-            //policy.WithOrigins("http://localhost:3000",
-            //    "https://localhost:7121/auth/register");
-            policy.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+            policy.WithOrigins(builder.Configuration["AllowedHosts"]).AllowAnyMethod().AllowAnyHeader();
         });
 });
 
-// Add services to the container.
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddDbContext<DataContext>();
-//builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddControllers();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+var emailConfig = builder.Configuration
+    .GetSection("EmailConfiguration")
+    .Get<EmailConfiguration>();
+builder.Services.AddSingleton(emailConfig);
+builder.Services.AddScoped<IEmailSender, EmailSender>();
+
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
@@ -32,7 +34,12 @@ builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
-var app = builder.Build();
+var app = builder.Build(); 
+ICollection<string> urls;
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    urls = app.Urls;
+});
 
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
@@ -43,7 +50,7 @@ app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
 app.UseRouting();
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors(allowedOriginsForCors);
 app.UseAuthorization();
 
 app.MapControllers();
