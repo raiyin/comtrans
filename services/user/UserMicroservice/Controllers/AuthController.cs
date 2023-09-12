@@ -11,15 +11,19 @@ namespace UserMicroservice.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthRepository _authRepo;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(IAuthRepository authRepo)
+        public AuthController(
+            IAuthRepository authRepo,
+            IConfiguration configuration)
         {
             _authRepo = authRepo;
+            _configuration = configuration;
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
-        {            
+        {
             var response = await _authRepo.Register(
                 new User { Login = request.Login },
                 request.Password,
@@ -58,10 +62,12 @@ namespace UserMicroservice.Controllers
             var response = await _authRepo.Activate(activationString);
             if (!response.Success)
             {
-                return BadRequest(response);
+                //return BadRequest(response);
+
+                return Redirect(_configuration.GetSection("AppSettings:ClientUrl").Value + "/activation/failure");
             }
 
-            return Ok(response);
+            return Redirect(_configuration.GetSection("AppSettings:ClientUrl").Value + "/activation/success");
         }
     }
 }

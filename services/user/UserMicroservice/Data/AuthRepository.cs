@@ -61,7 +61,7 @@ namespace UserMicroservice.Data
 
                 var message = new Message(
                     user.Email,
-                    "Verification email",
+                    "Activation link from ComTrans",
                     activationLink
                     );
                 _emailSender.SendEmail(message);

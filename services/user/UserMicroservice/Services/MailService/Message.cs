@@ -11,7 +11,7 @@ namespace UserMicroservice.Services.MailService
 
         public Message(string to, string subject, string content)
         {
-            To = new MailboxAddress("Validation link", to);
+            To = new MailboxAddress("Activation link", to);
             Subject = subject;
             Content = content;
         }

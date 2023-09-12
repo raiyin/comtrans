@@ -101,7 +101,7 @@ const Signup = () => {
         }
 
         clearFields();
-        navigate('/', { replace: true });
+        navigate('/activation/needed', { replace: true });
     };
 
     return (
