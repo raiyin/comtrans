@@ -1,0 +1,14 @@
+.activation_success {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-message {
+    display: flex;
+    flex-direction: column;
+    width: 340px;
+    background: #fff;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}

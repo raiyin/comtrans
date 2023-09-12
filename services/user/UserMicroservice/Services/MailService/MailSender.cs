@@ -17,14 +17,13 @@ namespace UserMicroservice.Services.MailService
         public void SendEmail(Message message)
         {
             var emailMessage = CreateEmailMessage(message);
-
             Send(emailMessage);
         }
 
         private MimeMessage CreateEmailMessage(Message message)
         {
             var emailMessage = new MimeMessage();
-            emailMessage.From.Add(new MailboxAddress("email", _emailConfig.From));
+            emailMessage.From.Add(new MailboxAddress("ComTrans", _emailConfig.From));
             emailMessage.To.Add(message.To);
             emailMessage.Subject = message.Subject;
             emailMessage.Body = new TextPart(MimeKit.Text.TextFormat.Html)
@@ -38,7 +37,8 @@ namespace UserMicroservice.Services.MailService
                             {0}
                         </a>
                     </div>",
-                    message.Content)
+                    message.Content
+                )
             };
 
             return emailMessage;
@@ -50,7 +50,7 @@ namespace UserMicroservice.Services.MailService
             {
                 try
                 {
-                    // Паполь берется из предварительно сконфигурированного secret stotage.
+                    // Пароль берется из предварительно сконфигурированного secret stotage.
                     client.Connect(_emailConfig.SmtpServer, _emailConfig.Port, true);
                     client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.Authenticate(_emailConfig.UserName, _config["mail:password"]);
