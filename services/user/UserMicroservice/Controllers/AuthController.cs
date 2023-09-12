@@ -52,11 +52,16 @@ namespace UserMicroservice.Controllers
             return Ok(response);
         }
 
-        [HttpPost("activate")]
-        public async Task<ActionResult<ServiceResponse<int>>> Activate(UserActivateDto request)
+        [HttpGet("activate/{activationString}")]
+        public async Task<ActionResult<ServiceResponse<int>>> Activate(string activationString)
         {
-            throw new NotImplementedException();
-        }
+            var response = await _authRepo.Activate(activationString);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
 
+            return Ok(response);
+        }
     }
 }

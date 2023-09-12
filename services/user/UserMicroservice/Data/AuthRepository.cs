@@ -8,6 +8,8 @@ using UserMicroservice.Model;
 using UserMicroservice.Services.MailService;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Cryptography;
+using System.Text;
+using SimpleBase;
 
 namespace UserMicroservice.Data
 {
@@ -17,8 +19,13 @@ namespace UserMicroservice.Data
         private readonly IConfiguration _configuration;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly string separator = "**";
 
-        public AuthRepository(DataContext context, IConfiguration configuration, IEmailSender emailSender, ILogger<AuthRepository> logger)
+        public AuthRepository(
+            DataContext context,
+            IConfiguration configuration,
+            IEmailSender emailSender,
+            ILogger<AuthRepository> logger)
         {
             _context = context;
             _configuration = configuration;
@@ -38,7 +45,7 @@ namespace UserMicroservice.Data
 
             try
             {
-                var randomString = CreatePRGActivationLink();
+                var randomString = CreatePRGActivationLink(email);
                 string activationLink = $"https://{hostValue}/auth/activate/{randomString}";
                 CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
                 user.PasswordHash = passwordHash;
@@ -47,7 +54,7 @@ namespace UserMicroservice.Data
                 user.Email = email;
                 user.Activated = false;
                 user.ActivationLinkSendData = DateTime.UtcNow;
-                user.ActivationString = randomString;
+                user.ActivationToken = randomString;
 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
@@ -67,7 +74,7 @@ namespace UserMicroservice.Data
                 response.Data = 0;
                 response.Message = "The error has occured while user creating";
                 response.Success = false;
-                _logger.LogInformation(ex.Message);
+                _logger.LogInformation(ex.Message + Environment.NewLine + ex.StackTrace);
             }
 
             return response;
@@ -82,7 +89,6 @@ namespace UserMicroservice.Data
             {
                 response.Success = false;
                 response.Message = "User not found";
-
             }
             else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
@@ -96,9 +102,53 @@ namespace UserMicroservice.Data
             return response;
         }
 
-        public async Task<ServiceResponse<int>> Activate(string link)
+        public async Task<ServiceResponse<string>> Activate(string activationString)
         {
-            throw new NotImplementedException();
+            var response = new ServiceResponse<string>();
+            string email = string.Empty;
+            User? user = null; 
+            string token;
+
+            try
+            {
+                string emailBase58String = activationString.Substring(0, activationString.IndexOf(separator));
+                byte[] emailBytes = Base58.Bitcoin.Decode(emailBase58String);
+                email = Encoding.UTF8.GetString(emailBytes);
+
+                token = activationString.Substring(activationString.IndexOf(separator) + separator.Length);
+                user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message + Environment.NewLine + ex.StackTrace);
+                response.Success = false;
+                response.Message = "Incorrect activation link format";
+                return response;
+            }
+
+            if (user == null)
+            {
+                response.Success = false;
+                response.Message = "User not found";
+            }
+            else if (user.ActivationToken.Equals(token))
+            {
+                response.Success = false;
+                response.Message = "Wrong activation token";
+            }
+            else if (user.ActivationLinkSendData.AddHours(24) < DateTime.UtcNow)
+            {
+                response.Success = false;
+                response.Message = "Activation link has expired";
+            }
+            else
+            {
+                user.Activated = true;
+                user.Enabled = true;
+                await _context.SaveChangesAsync();
+                response.Success = true;
+            }
+            return response;
         }
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
@@ -136,10 +186,10 @@ namespace UserMicroservice.Data
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA512())
+            using (var hmac = new HMACSHA512())
             {
                 passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             }
         }
 
@@ -152,10 +202,11 @@ namespace UserMicroservice.Data
             return false;
         }
 
-        private string CreatePRGActivationLink()
+        private string CreatePRGActivationLink(string email)
         {
-            var randomString = Convert.ToBase64String(RandomNumberGenerator.GetBytes(100));
-            return randomString;
+            string emailBase58String = Base58.Bitcoin.Encode(Encoding.UTF8.GetBytes(email));
+            var randomString = Base58.Bitcoin.Encode(RandomNumberGenerator.GetBytes(100));
+            return emailBase58String + separator + randomString;
         }
     }
 }
