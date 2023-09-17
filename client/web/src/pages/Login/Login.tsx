@@ -1,7 +1,7 @@
-import React, { SyntheticEvent, useState } from 'react';
+import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import cl from './login.module.scss';
-import { Alert, Button, Snackbar, TextField } from '@mui/material';
+import { Alert, Button, FormControl, Snackbar, TextField } from '@mui/material';
 import { LoginData } from '../../types/auth';
 import { useNavigate } from "react-router-dom";
 import { login } from '../../utils/requests';
@@ -28,9 +28,6 @@ const Login = () => {
         setAlertOpenState(false);
     };
 
-    const onSubmit = (data: any) => {
-    };
-
     const openAlert = () => {
         setAlertOpenState(true);
     };
@@ -49,7 +46,7 @@ const Login = () => {
         const result = await login(loginData);
 
         if (!result) {
-            setAlertMessage(() => 'Ошибка регистрации пользователя.');
+            setAlertMessage(() => 'An error occurred while logging in');
             openAlert();
             return;
         }
@@ -58,13 +55,27 @@ const Login = () => {
         navigate('/', { replace: true });
     };
 
+    function onEmailChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
+        setEmail(() => e.target.value);
+    }
+
+    function onPasswordChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
+        setPassword(() => e.target.value);
+    }
+
     return (
 
         <div className={cl['login']} >
 
-            <form
-                onSubmit={handleSubmit(onSubmit)}
-                className={cl['login-form']}>
+            <FormControl className={cl['login-form']}
+                sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    padding: '20px'
+                }}
+            >
 
                 <span className={cl['login-form__header']}>
                     Welcome
@@ -76,7 +87,8 @@ const Login = () => {
                     label="Email"
                     variant="outlined"
                     size="small"
-                    {...register(`email`, { required: true })} />
+                    value={email}
+                    onChange={onEmailChange} />
 
                 <TextField
                     sx={{ width: '300px', marginTop: '20px' }}
@@ -85,7 +97,8 @@ const Login = () => {
                     type="password"
                     variant="outlined"
                     size="small"
-                    {...register(`password`, { required: true })} />
+                    value={password}
+                    onChange={onPasswordChange} />
 
                 <Button
                     sx={{ marginTop: '20px' }}
@@ -95,7 +108,7 @@ const Login = () => {
                 >
                     Login
                 </Button>
-            </form>
+            </FormControl>
 
 
             <Snackbar

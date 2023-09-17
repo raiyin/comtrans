@@ -16,7 +16,7 @@ namespace UserMicroservice.Data
     public class AuthRepository : IAuthRepository
     {
         private readonly DataContext _context;
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _config;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
         private readonly string separator = "**";
@@ -28,7 +28,7 @@ namespace UserMicroservice.Data
             ILogger<AuthRepository> logger)
         {
             _context = context;
-            _configuration = configuration;
+            _config = configuration;
             _emailSender = emailSender;
             _logger = logger;
         }
@@ -153,9 +153,9 @@ namespace UserMicroservice.Data
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA256(passwordSalt))
+            using (var hmac = new HMACSHA256(passwordSalt))
             {
-                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return computeHash.SequenceEqual(passwordHash);
             }
         }
@@ -165,17 +165,19 @@ namespace UserMicroservice.Data
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Name)
+                new Claim(ClaimTypes.Name, user.Login)
             };
 
-            SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
-                .GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8
+                //.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+                .GetBytes(_config["userservice:secret_token"]));
 
-            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+            int tokenLifeTimeInDays = int.Parse(_config["AppSettings:TokenLifeTime"]);
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddDays(tokenLifeTimeInDays),
                 SigningCredentials = creds
             };
 
@@ -186,7 +188,7 @@ namespace UserMicroservice.Data
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using (var hmac = new HMACSHA512())
+            using (var hmac = new HMACSHA256())
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));

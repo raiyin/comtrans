@@ -7,12 +7,24 @@ const initialState: AuthState = {
         isActivated: false,
     },
     isAuth: false,
-    isLoading: false
+    isProccessing: false
 };
 
 export const authReducer = (state = initialState, action: AuthAction): AuthState => {
     switch (action.type) {
-        case AuthActionTypes.SET_CURRENT_USER:
+        case AuthActionTypes.AUTH_PROCCESSING:
+            return { ...state, isProccessing: true };
+        case AuthActionTypes.REGISTER_SUCCESS:
+            return { ...state, isProccessing: false };
+        case AuthActionTypes.ACTIVATE:
+            return { ...state, isProccessing: true };
+        case AuthActionTypes.LOGIN_SUCCESS:
+            return { ...state, currentUser: action.payload.currentUser };
+        case AuthActionTypes.LOGIN_ERROR:
+            return { ...state };
+        case AuthActionTypes.LOGOUT:
+            return { ...state, currentUser: action.payload.currentUser };
+        case AuthActionTypes.CHECKAUTH:
             return { ...state, currentUser: action.payload.currentUser };
         default:
             return state;

@@ -42,8 +42,8 @@ namespace UserMicroservice.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<int>>> Login(UserLoginDto request)
         {
-            var response = await _authRepo.Login(request.Login, request.Password);
-            if (response.Success)
+            var response = await _authRepo.Login(request.Email, request.Password);
+            if (!response.Success)
             {
                 return BadRequest(response);
             }
@@ -51,7 +51,7 @@ namespace UserMicroservice.Controllers
             CookieOptions options = new CookieOptions();
             options.HttpOnly = true;
             options.Expires = DateTime.Now.AddDays(30);
-            Response.Cookies.Append("refreshToken", response.Data, options);
+            Response.Cookies.Append("token", response.Data, options);
 
             return Ok(response);
         }
