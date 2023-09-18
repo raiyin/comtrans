@@ -1,6 +1,11 @@
 using UserMicroservice.Data;
 using UserMicroservice.Services.MailService;
 using UserMicroservice.Services.UserServices;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
