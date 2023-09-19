@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UserMicroservice.Dtos.User;
 using UserMicroservice.Model;
 using UserMicroservice.Services;
@@ -6,6 +7,7 @@ using UserMicroservice.Services.UserServices;
 
 namespace UserMicroservice.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase

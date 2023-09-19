@@ -36,6 +36,18 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+        .GetBytes(builder.Configuration.GetSection("userservice:secret_token").Value)),
+        ValidateIssuer = false,
+        ValidateAudience = false
+    };
+});
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
@@ -56,6 +68,7 @@ app.UseSwaggerUI();
 //app.UseHttpsRedirection();
 app.UseRouting();
 app.UseCors(allowedOriginsForCors);
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

@@ -169,7 +169,6 @@ namespace UserMicroservice.Data
             };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8
-                //.GetBytes(_configuration.GetSection("AppSettings:Token").Value));
                 .GetBytes(_config["userservice:secret_token"]));
 
             SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
