@@ -34,6 +34,7 @@ export const login = (registerData: RegisterData) => {
             dispatch({ type: AuthActionTypes.AUTH_PROCCESSING });
             const response = await AuthService.login(registerData.email, registerData.password);
             localStorage.setItem('token', response.data.token);
+            console.log(response.data.token);
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {

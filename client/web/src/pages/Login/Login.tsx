@@ -1,19 +1,11 @@
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import cl from './login.module.scss';
 import { Alert, Button, FormControl, Snackbar, TextField } from '@mui/material';
 import { LoginData } from '../../types/auth';
 import { useNavigate } from "react-router-dom";
-import { login } from '../../utils/requests';
 
 
 const Login = () => {
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors }
-    } = useForm();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -109,7 +101,6 @@ const Login = () => {
                     Login
                 </Button>
             </FormControl>
-
 
             <Snackbar
                 open={alertOpenState}
