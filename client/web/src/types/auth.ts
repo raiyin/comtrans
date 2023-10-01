@@ -7,7 +7,7 @@ export interface AuthState {
 }
 
 export interface RegisterData {
-    login: string;
+    username: string;
     password: string;
     email: string;
 }

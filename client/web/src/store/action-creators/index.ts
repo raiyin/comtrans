@@ -1,5 +1,12 @@
 import * as AuthActionCreators from './auth';
 
-export default {
+// export default {
+//     ...AuthActionCreators
+// };
+
+
+const ActionCreators = {
     ...AuthActionCreators
 };
+
+export default ActionCreators;

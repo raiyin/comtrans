@@ -77,7 +77,7 @@ namespace UserMicroservice.Services.UserServices
                 var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == updatedUser.Id);
 
                 _mapper.Map(updatedUser, user);
-                user.Login = updatedUser.Login;
+                user.Username = updatedUser.Username;
                 user.Role = updatedUser.Role;
                 user.Email = updatedUser.Email;
                 user.Name = updatedUser.Name;

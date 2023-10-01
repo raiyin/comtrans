@@ -25,7 +25,7 @@ namespace UserMicroservice.Controllers
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
             var response = await _authRepo.Register(
-                new User { Login = request.Login },
+                new User { Username = request.Username },
                 request.Password,
                 request.Email,
                 Request.Host.Value
@@ -40,18 +40,13 @@ namespace UserMicroservice.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<ServiceResponse<int>>> Login(UserLoginDto request)
+        public async Task<ActionResult<ServiceResponse<UserLogginResult>>> Login(UserLoginDto request)
         {
             var response = await _authRepo.Login(request.Email, request.Password);
             if (!response.Success)
             {
                 return BadRequest(response);
             }
-
-            CookieOptions options = new CookieOptions();
-            options.HttpOnly = true;
-            options.Expires = DateTime.Now.AddDays(30);
-            Response.Cookies.Append("token", response.Data, options);
 
             return Ok(response);
         }

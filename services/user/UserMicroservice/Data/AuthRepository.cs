@@ -10,6 +10,8 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Cryptography;
 using System.Text;
 using SimpleBase;
+using UserMicroservice.Dtos.User;
+using AutoMapper;
 
 namespace UserMicroservice.Data
 {
@@ -19,14 +21,17 @@ namespace UserMicroservice.Data
         private readonly IConfiguration _config;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
         private readonly string separator = "**";
 
         public AuthRepository(
+            IMapper mapper, 
             DataContext context,
             IConfiguration configuration,
             IEmailSender emailSender,
             ILogger<AuthRepository> logger)
         {
+            _mapper = mapper;
             _context = context;
             _config = configuration;
             _emailSender = emailSender;
@@ -36,7 +41,7 @@ namespace UserMicroservice.Data
         public async Task<ServiceResponse<int>> Register(User user, string password, string email, string hostValue)
         {
             ServiceResponse<int> response = new ServiceResponse<int>();
-            if (await UserExists(user.Login))
+            if (await UserExists(user.Username))
             {
                 response.Success = false;
                 response.Message = "User already exists.";
@@ -80,9 +85,9 @@ namespace UserMicroservice.Data
             return response;
         }
 
-        public async Task<ServiceResponse<string>> Login(string email, string password)
+        public async Task<ServiceResponse<UserLogginResult>> Login(string email, string password)
         {
-            var response = new ServiceResponse<string>();
+            var response = new ServiceResponse<UserLogginResult>();
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
 
             if (user == null)
@@ -97,7 +102,10 @@ namespace UserMicroservice.Data
             }
             else
             {
-                response.Data = CreateToken(user);
+                string token = CreateToken(user);
+                var loggedInUser = _mapper.Map<UserLogginResult>(user);
+                loggedInUser.Token = token;
+                response.Data = loggedInUser;
             }
             return response;
         }
@@ -197,7 +205,7 @@ namespace UserMicroservice.Data
 
         public async Task<bool> UserExists(string username)
         {
-            if (await _context.Users.AnyAsync(user => user.Login.ToLower() == username.ToLower()))
+            if (await _context.Users.AnyAsync(user => user.Username.ToLower() == username.ToLower()))
             {
                 return true;
             }

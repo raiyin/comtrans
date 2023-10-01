@@ -1,7 +1,7 @@
 import axios from "axios";
 import { IUser } from "../../models/IUser";
 import AuthService from "../../services/AuthService";
-import { AuthState, AuthAction, AuthActionTypes, RegisterData } from "../../types/auth";
+import { AuthAction, AuthActionTypes, RegisterData, LoginData } from "../../types/auth";
 import { Dispatch } from 'redux';
 import { AuthResponse } from "../../models/response/AuthResponse";
 import { API_URL } from "../../http";
@@ -10,7 +10,7 @@ export const register = (registerData: RegisterData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
             dispatch({ type: AuthActionTypes.AUTH_PROCCESSING });
-            const response = await AuthService.registration(registerData.email, registerData.password);
+            const response = await AuthService.registration(registerData);
             dispatch({
                 type: AuthActionTypes.REGISTER_SUCCESS,
                 payload: {
@@ -28,24 +28,24 @@ export const register = (registerData: RegisterData) => {
     };
 };
 
-export const login = (registerData: RegisterData) => {
+export const login = (loginData: LoginData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
+            console.log(`sending...`);
             dispatch({ type: AuthActionTypes.AUTH_PROCCESSING });
-            const response = await AuthService.login(registerData.email, registerData.password);
-            localStorage.setItem('token', response.data.token);
-            console.log(response.data.token);
+            const response = await AuthService.login(loginData.email, loginData.password);
+            const user = response.data.data;
+            localStorage.setItem('token', user.token);
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
-                    currentUser: response.data.user,
+                    currentUser: user,
                     isAuth: true,
                     isProccessing: false,
                 }
             });
-
         } catch (e: any) {
-            console.log(e.response?.data?.message);
+            console.log(`error ${e.response}`);
             dispatch({
                 type: AuthActionTypes.LOGIN_ERROR
             });

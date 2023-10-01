@@ -3,6 +3,7 @@ import cl from './login.module.scss';
 import { Alert, Button, FormControl, Snackbar, TextField } from '@mui/material';
 import { LoginData } from '../../types/auth';
 import { useNavigate } from "react-router-dom";
+import { useActions } from '../../hooks/useActions';
 
 
 const Login = () => {
@@ -12,6 +13,9 @@ const Login = () => {
     const [alertOpenState, setAlertOpenState] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const navigate = useNavigate();
+    const {
+        login
+    } = useActions();
 
     const onAlertSnackbarClose = (_event?: SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
@@ -37,11 +41,12 @@ const Login = () => {
 
         const result = await login(loginData);
 
-        if (!result) {
-            setAlertMessage(() => 'An error occurred while logging in');
-            openAlert();
-            return;
-        }
+        // TODO обработать в try catch, наверху не перехватывать
+        // if (!result) {
+        //     setAlertMessage(() => 'An error occurred while logging in');
+        //     openAlert();
+        //     return;
+        // }
 
         clearFields();
         navigate('/', { replace: true });
@@ -96,7 +101,7 @@ const Login = () => {
                     sx={{ marginTop: '20px' }}
                     variant="outlined"
                     type="submit"
-                    onClick={(event) => loginUser(event)}
+                    onClick={loginUser}
                 >
                     Login
                 </Button>

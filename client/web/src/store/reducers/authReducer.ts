@@ -2,9 +2,10 @@ import { AuthAction, AuthActionTypes, AuthState } from '../../types/auth';
 
 const initialState: AuthState = {
     currentUser: {
-        id: '',
+        username: '',
         email: '',
         isActivated: false,
+        token: ''
     },
     isAuth: false,
     isProccessing: false
@@ -19,7 +20,7 @@ export const authReducer = (state = initialState, action: AuthAction): AuthState
         case AuthActionTypes.ACTIVATE:
             return { ...state, isProccessing: true };
         case AuthActionTypes.LOGIN_SUCCESS:
-            return { ...state, currentUser: action.payload.currentUser };
+            return { ...action.payload };
         case AuthActionTypes.LOGIN_ERROR:
             return { ...state };
         case AuthActionTypes.LOGOUT:

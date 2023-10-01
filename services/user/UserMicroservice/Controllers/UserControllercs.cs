@@ -7,7 +7,7 @@ using UserMicroservice.Services.UserServices;
 
 namespace UserMicroservice.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase
