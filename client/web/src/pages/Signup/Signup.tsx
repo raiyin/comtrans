@@ -4,13 +4,13 @@ import cl from './signup.module.scss';
 import { Alert, Button, FormControl, Snackbar, TextField } from '@mui/material';
 import validateEmail from '../../utils/email';
 import { RegisterData } from '../../types/auth';
-import { register } from '../../utils/requests';
+import AuthService from '../../services/AuthService';
 
 
 const Signup = () => {
 
-    const [login, setLogin] = useState('');
-    const [wasLoginModified, setWasLoginModified] = useState(false);
+    const [username, setUsername] = useState('');
+    const [wasUsernameModified, setWasUsernameModified] = useState(false);
 
     const [email, setEmail] = useState('');
     const [wasEmailModified, setWasEmailModified] = useState(false);
@@ -29,9 +29,9 @@ const Signup = () => {
     const navigate = useNavigate();
 
 
-    const loginChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        setWasLoginModified(true);
-        setLogin(() => e.target.value);
+    const usernameChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        setWasUsernameModified(true);
+        setUsername(() => e.target.value);
     };
 
     const emailChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -80,7 +80,7 @@ const Signup = () => {
     };
 
     const clearFields = () => {
-        setLogin('');
+        setUsername('');
         setEmail('');
         setPassword('');
         setConfirmPassword('');
@@ -89,10 +89,11 @@ const Signup = () => {
     const registerUser = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
         const registerData: RegisterData = {
-            login, password, email
+            username: username, password, email
         };
 
-        const result = await register(registerData);
+        //const result = await register(registerData);
+        const result = await AuthService.registration(registerData);
 
         if (!result) {
             setAlertMessage(() => 'Ошибка регистрации пользователя.');
@@ -124,13 +125,13 @@ const Signup = () => {
 
                 <TextField
                     sx={{ width: '300px', marginTop: '20px' }}
-                    id={`login`}
-                    label="Login"
+                    id={`username`}
+                    label="Username"
                     variant="outlined"
                     required
                     size="small"
-                    value={login}
-                    onChange={loginChangeHandler}
+                    value={username}
+                    onChange={usernameChangeHandler}
                 />
 
                 <TextField

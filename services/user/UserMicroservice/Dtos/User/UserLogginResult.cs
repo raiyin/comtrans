@@ -1,11 +1,10 @@
-﻿using UserMicroservice.Model;
-
-namespace UserMicroservice.Dtos.User
+﻿namespace UserMicroservice.Dtos.User
 {
-    public class GetUserDto
+    public class UserLogginResult
     {
         public string? Email { get; set; }
         public string? Username { get; set; }
         public bool IsActivated { get; set; }
+        public string? Token { get; set; }
     }
 }

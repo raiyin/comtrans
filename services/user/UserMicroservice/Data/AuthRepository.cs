@@ -10,25 +10,30 @@ using Org.BouncyCastle.Asn1.Ocsp;
 using System.Security.Cryptography;
 using System.Text;
 using SimpleBase;
+using UserMicroservice.Dtos.User;
+using AutoMapper;
 
 namespace UserMicroservice.Data
 {
     public class AuthRepository : IAuthRepository
     {
         private readonly DataContext _context;
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _config;
         private readonly IEmailSender _emailSender;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
         private readonly string separator = "**";
 
         public AuthRepository(
+            IMapper mapper, 
             DataContext context,
             IConfiguration configuration,
             IEmailSender emailSender,
             ILogger<AuthRepository> logger)
         {
+            _mapper = mapper;
             _context = context;
-            _configuration = configuration;
+            _config = configuration;
             _emailSender = emailSender;
             _logger = logger;
         }
@@ -36,7 +41,7 @@ namespace UserMicroservice.Data
         public async Task<ServiceResponse<int>> Register(User user, string password, string email, string hostValue)
         {
             ServiceResponse<int> response = new ServiceResponse<int>();
-            if (await UserExists(user.Login))
+            if (await UserExists(user.Username))
             {
                 response.Success = false;
                 response.Message = "User already exists.";
@@ -80,9 +85,9 @@ namespace UserMicroservice.Data
             return response;
         }
 
-        public async Task<ServiceResponse<string>> Login(string email, string password)
+        public async Task<ServiceResponse<UserLogginResult>> Login(string email, string password)
         {
-            var response = new ServiceResponse<string>();
+            var response = new ServiceResponse<UserLogginResult>();
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Email.ToLower().Equals(email.ToLower()));
 
             if (user == null)
@@ -97,7 +102,10 @@ namespace UserMicroservice.Data
             }
             else
             {
-                response.Data = CreateToken(user);
+                string token = CreateToken(user);
+                var loggedInUser = _mapper.Map<UserLogginResult>(user);
+                loggedInUser.Token = token;
+                response.Data = loggedInUser;
             }
             return response;
         }
@@ -153,9 +161,9 @@ namespace UserMicroservice.Data
 
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using (var hmac = new System.Security.Cryptography.HMACSHA256(passwordSalt))
+            using (var hmac = new HMACSHA256(passwordSalt))
             {
-                var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var computeHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return computeHash.SequenceEqual(passwordHash);
             }
         }
@@ -165,17 +173,19 @@ namespace UserMicroservice.Data
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.Name)
+                //new Claim(ClaimTypes.Name, user.Login                
+                new Claim(ClaimTypes.Email, user.Email)
             };
 
-            SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
-                .GetBytes(_configuration.GetSection("AppSettings:Token").Value));
+            SymmetricSecurityKey key = new SymmetricSecurityKey(Encoding.UTF8
+                .GetBytes(_config["userservice:secret_token"]));
 
-            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+            SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+            int tokenLifeTimeInDays = int.Parse(_config["AppSettings:TokenLifeTime"]);
             SecurityTokenDescriptor tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(1),
+                Expires = DateTime.Now.AddDays(tokenLifeTimeInDays),
                 SigningCredentials = creds
             };
 
@@ -186,7 +196,7 @@ namespace UserMicroservice.Data
 
         private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
-            using (var hmac = new HMACSHA512())
+            using (var hmac = new HMACSHA256())
             {
                 passwordSalt = hmac.Key;
                 passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
@@ -195,7 +205,7 @@ namespace UserMicroservice.Data
 
         public async Task<bool> UserExists(string username)
         {
-            if (await _context.Users.AnyAsync(user => user.Login.ToLower() == username.ToLower()))
+            if (await _context.Users.AnyAsync(user => user.Username.ToLower() == username.ToLower()))
             {
                 return true;
             }

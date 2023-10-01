@@ -16,6 +16,7 @@ namespace dotnet_rpg
             CreateMap<User, UserLoginDto>();
             CreateMap<User, GetUserDto>();
             CreateMap<UpdateUserDto, User>();
+            CreateMap<User, UserLogginResult>();
         }
     }
 }
