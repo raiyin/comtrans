@@ -1,15 +1,22 @@
-import React from 'react';
+import { useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { AppBar, Box, Button, IconButton, InputBase, ThemeProvider, Toolbar, Typography, alpha, createTheme, styled } from '@mui/material';
 import { Navigate, useNavigate } from 'react-router';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+import { deepOrange, deepPurple } from '@mui/material/colors';
 
-const navItems = ['contact', 'login', 'signup'];
+const navItems = ['login', 'signup'];
 
 const Header = () => {
 
     const navigate = useNavigate();
-    const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const currentUser = useTypedSelector(state => state.authStateReducer.currentUser);
+    const isAuth = useTypedSelector(state => state.authStateReducer.isAuth);
 
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
@@ -101,20 +108,41 @@ const Header = () => {
                         </Search>
 
                         <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            {navItems.map((item: string) => (
-                                <Button
-                                    key={item}
-                                    sx={{ color: '#fff' }}
-                                    onClick={() => navigate(item)}
-                                >
-                                    {item}
-                                </Button>
-                            ))}
+                            <Button
+                                key={'contact'}
+                                sx={{ color: '#fff' }}
+                                onClick={() => navigate('/contact')}
+                            >
+                                Contact
+                            </Button>
                         </Box>
+
+
+                        {isAuth ?
+                            <>
+                                <Avatar sx={{ bgcolor: deepOrange[500] }}>
+                                    {currentUser.username[0]}
+                                </Avatar>
+                            </> :
+                            <>
+                                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                                    {navItems.map((item: string) => (
+                                        <Button
+                                            key={item}
+                                            sx={{ color: '#fff' }}
+                                            onClick={() => navigate(item)}
+                                        >
+                                            {item}
+                                        </Button>
+                                    ))}
+                                </Box>
+                            </>
+                        }
 
                     </Toolbar>
                 </AppBar>
             </ThemeProvider>
+
         </header>
 
     );
