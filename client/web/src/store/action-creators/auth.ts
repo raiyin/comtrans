@@ -9,7 +9,7 @@ import { API_URL } from "../../http";
 export const register = (registerData: RegisterData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING });
+            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: true });
             const response = await AuthService.registration(registerData);
             dispatch({
                 type: AuthActionTypes.REGISTER_SUCCESS,
@@ -25,6 +25,9 @@ export const register = (registerData: RegisterData) => {
                 type: AuthActionTypes.REGISTRATION_ERROR
             });
         }
+        finally {
+            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: false });
+        }
     };
 };
 
@@ -32,7 +35,7 @@ export const login = (loginData: LoginData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
             console.log(`sending...`);
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING });
+            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: true });
             const response = await AuthService.login(loginData.email, loginData.password);
             const user = response.data.data;
             localStorage.setItem('token', user.token);
@@ -50,13 +53,16 @@ export const login = (loginData: LoginData) => {
                 type: AuthActionTypes.LOGIN_ERROR
             });
         }
+        finally {
+            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: false });
+        }
     };
 };
 
 export const logout = () => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING });
+            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: true });
             await AuthService.logout();
             localStorage.removeItem('token');
             dispatch({
@@ -75,8 +81,8 @@ export const logout = () => {
 
 export const checkAuth = () => {
     return async (dispatch: Dispatch<AuthAction>) => {
+        dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: true });
         try {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING });
             const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true });
             localStorage.setItem('token', response.data.token);
             dispatch({
@@ -92,6 +98,9 @@ export const checkAuth = () => {
             dispatch({
                 type: AuthActionTypes.LOGIN_ERROR
             });
+        }
+        finally {
+            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: false });
         }
     };
 };

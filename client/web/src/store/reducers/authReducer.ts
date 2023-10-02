@@ -13,8 +13,8 @@ const initialState: AuthState = {
 
 export const authReducer = (state = initialState, action: AuthAction): AuthState => {
     switch (action.type) {
-        case AuthActionTypes.AUTH_PROCCESSING:
-            return { ...state, isProccessing: true };
+        case AuthActionTypes.IS_AUTH_PROCCESSING:
+            return { ...state, isProccessing: action.payload };
         case AuthActionTypes.REGISTER_SUCCESS:
             return { ...state, isProccessing: false };
         case AuthActionTypes.ACTIVATE:
