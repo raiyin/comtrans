@@ -8,7 +8,7 @@ namespace UserMicroservice.Data
         Task<ServiceResponse<int>> Register(User user, string password, string email, string hostValue);
         Task<ServiceResponse<UserLogginResult>> Login(string email, string password);
         Task<ServiceResponse<string>> Activate(string activationString);
-        Task<ServiceResponse<bool>> UserExists(string username);
+        Task<bool> UserExists(string username);
         Task<ServiceResponse<string>> Refresh(string token);
     }
 }

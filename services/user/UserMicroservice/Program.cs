@@ -21,7 +21,6 @@ builder.Services.AddCors(options =>
         });
 });
 
-builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddDbContext<DataContext>();
 
 var emailConfig = builder.Configuration
@@ -61,7 +60,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     };
 });
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddHttpContextAccessor();
 builder.Services.AddRouting(options => options.LowercaseUrls = true);
 
 var app = builder.Build();
@@ -83,6 +81,6 @@ app.UseRouting();
 app.UseCors(allowedOriginsForCors);
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
+
 app.Run();

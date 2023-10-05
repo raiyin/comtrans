@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 using UserMicroservice.Data;
 using UserMicroservice.Dtos.User;
 using UserMicroservice.Model;
@@ -41,6 +43,19 @@ namespace UserMicroservice.Controllers
 
         [HttpPost("login")]
         public async Task<ActionResult<ServiceResponse<UserLogginResult>>> Login(UserLoginDto request)
+        {
+            var response = await _authRepo.Login(request.Email, request.Password);
+            if (!response.Success)
+            {
+                return BadRequest(response);
+            }
+
+            return Ok(response);
+        }
+
+        [Authorize]
+        [HttpGet("check")]
+        public async Task<ActionResult<ServiceResponse<UserLogginResult>>> CheckAuth()
         {
             var response = await _authRepo.Login(request.Email, request.Password);
             if (!response.Success)

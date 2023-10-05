@@ -34,7 +34,6 @@ export const register = (registerData: RegisterData) => {
 export const login = (loginData: LoginData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            console.log(`sending...`);
             dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: true });
             const response = await AuthService.login(loginData.email, loginData.password);
             const user = response.data.data;
@@ -83,12 +82,14 @@ export const checkAuth = () => {
     return async (dispatch: Dispatch<AuthAction>) => {
         dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: true });
         try {
-            const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true });
-            localStorage.setItem('token', response.data.token);
+            const response = await axios.get<AuthResponse>(`${API_URL}/auth/check`, { withCredentials: true });
+            // TODO проверить на 401
+            const user = response.data.user;
+            localStorage.setItem('token', user.token);
             dispatch({
                 type: AuthActionTypes.LOGIN_SUCCESS,
                 payload: {
-                    currentUser: response.data.user,
+                    currentUser: user,
                     isAuth: true,
                     isProccessing: false,
                 }
