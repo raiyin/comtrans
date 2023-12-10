@@ -57,6 +57,8 @@ namespace UserMicroservice.Controllers
         [HttpGet("check")]
         public async Task<ActionResult<ServiceResponse<UserLogginResult>>> CheckAuth()
         {
+            HttpContext.User.Identity.IsAuthenticated
+
             var response = await _authRepo.Login(request.Email, request.Password);
             if (!response.Success)
             {
