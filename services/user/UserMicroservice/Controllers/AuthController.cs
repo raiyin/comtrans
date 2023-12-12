@@ -10,6 +10,7 @@ namespace UserMicroservice.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthController : Controller
     {
         private readonly IAuthRepository _authRepo;
@@ -24,6 +25,7 @@ namespace UserMicroservice.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
             var response = await _authRepo.Register(
@@ -42,6 +44,7 @@ namespace UserMicroservice.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<UserLogginResult>>> Login(UserLoginDto request)
         {
             var response = await _authRepo.Login(request.Email, request.Password);
@@ -53,17 +56,14 @@ namespace UserMicroservice.Controllers
             return Ok(response);
         }
 
-        [Authorize]
         [HttpGet("check")]
-        public async Task<ActionResult<ServiceResponse<UserLogginResult>>> CheckAuth()
+        public async Task<ActionResult<bool>> CheckAuth(GetUserDto getUserDto)
         {
-            HttpContext.User.Identity.IsAuthenticated
-
-            var response = await _authRepo.Login(request.Email, request.Password);
-            if (!response.Success)
-            {
-                return BadRequest(response);
-            }
+            var response = await _authRepo.UserExists(getUserDto.Username);
+            //if (!response.Success)
+            //{
+            //    return BadRequest(response);
+            //}
 
             return Ok(response);
         }

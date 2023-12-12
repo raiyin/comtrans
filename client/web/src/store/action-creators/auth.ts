@@ -9,7 +9,7 @@ import { API_URL } from "../../http";
 export const register = (registerData: RegisterData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: true });
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: true });
             const response = await AuthService.registration(registerData);
             dispatch({
                 type: AuthActionTypes.REGISTER_SUCCESS,
@@ -26,7 +26,7 @@ export const register = (registerData: RegisterData) => {
             });
         }
         finally {
-            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: false });
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: false });
         }
     };
 };
@@ -34,7 +34,7 @@ export const register = (registerData: RegisterData) => {
 export const login = (loginData: LoginData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: true });
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: true });
             const response = await AuthService.login(loginData.email, loginData.password);
             const user = response.data.data;
             localStorage.setItem('token', user.token);
@@ -53,7 +53,7 @@ export const login = (loginData: LoginData) => {
             });
         }
         finally {
-            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: false });
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: false });
         }
     };
 };
@@ -61,7 +61,7 @@ export const login = (loginData: LoginData) => {
 export const logout = () => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: true });
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: true });
             await AuthService.logout();
             localStorage.removeItem('token');
             dispatch({
@@ -79,8 +79,12 @@ export const logout = () => {
 };
 
 export const checkAuth = () => {
+
+
+    console.log('dispatch')
+
     return async (dispatch: Dispatch<AuthAction>) => {
-        dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: true });
+        dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: true });
         try {
             const response = await axios.get<AuthResponse>(`${API_URL}/auth/check`, { withCredentials: true });
             // TODO проверить на 401
@@ -101,7 +105,7 @@ export const checkAuth = () => {
             });
         }
         finally {
-            dispatch({ type: AuthActionTypes.IS_AUTH_PROCCESSING, payload: false });
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: false });
         }
     };
 };

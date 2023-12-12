@@ -19,6 +19,6 @@ export default class AuthService {
     }
 
     static async checkAuth(): Promise<AxiosResponse<boolean>> {
-        return $api.get<boolean>('/auth/checkauth');
+        return $api.get<boolean>('/auth/check');
     }
 }

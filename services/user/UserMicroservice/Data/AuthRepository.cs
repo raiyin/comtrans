@@ -165,19 +165,19 @@ namespace UserMicroservice.Data
             return response;
         }
 
-        public async Task<ServiceResponse<UserLogginResult>> Check()
-        {
-            var response = new ServiceResponse<UserLogginResult>();
-            if(!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
-            {
-                response.Success = false;
-                response.Message = "Authorization has been expired";
-            }
-            else
-            {
+        //public async Task<ServiceResponse<UserLogginResult>> Check()
+        //{
+        //    var response = new ServiceResponse<UserLogginResult>();
+        //    if(!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
+        //    {
+        //        response.Success = false;
+        //        response.Message = "Authorization has been expired";
+        //    }
+        //    else
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         public async Task<bool> UserExists(string username)
         {

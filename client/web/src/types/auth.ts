@@ -19,7 +19,7 @@ export interface LoginData {
 
 export enum AuthActionTypes {
     REGISTER = 'REGISTER',
-    IS_AUTH_PROCCESSING = 'AUTH_PROCCESSING',
+    AUTH_PROCCESSING = 'AUTH_PROCCESSING',
     REGISTER_SUCCESS = 'REGISTER_SUCCESS',
     REGISTRATION_ERROR = 'REGISTRATION_ERROR',
     ACTIVATE = 'ACTIVATE',
@@ -31,7 +31,7 @@ export enum AuthActionTypes {
 
 
 interface AuthProccessingAction {
-    type: AuthActionTypes.IS_AUTH_PROCCESSING;
+    type: AuthActionTypes.AUTH_PROCCESSING;
     payload: boolean;
 }
 
