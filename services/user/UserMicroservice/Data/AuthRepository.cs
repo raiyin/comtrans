@@ -26,7 +26,7 @@ namespace UserMicroservice.Data
         private readonly string separator = "**";
 
         public AuthRepository(
-            IMapper mapper, 
+            IMapper mapper,
             DataContext context,
             IConfiguration configuration,
             IEmailSender emailSender,
@@ -120,7 +120,7 @@ namespace UserMicroservice.Data
         {
             var response = new ServiceResponse<string>();
             string email = string.Empty;
-            User? user = null; 
+            User? user = null;
             string token;
 
             try
@@ -165,19 +165,13 @@ namespace UserMicroservice.Data
             return response;
         }
 
-        //public async Task<ServiceResponse<UserLogginResult>> Check()
-        //{
-        //    var response = new ServiceResponse<UserLogginResult>();
-        //    if(!_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated)
-        //    {
-        //        response.Success = false;
-        //        response.Message = "Authorization has been expired";
-        //    }
-        //    else
-        //    {
-
-        //    }
-        //}
+        public ServiceResponse<bool> CheckAuth()
+        {
+            var response = new ServiceResponse<bool>();
+            response.Success = true;
+            response.Data = true;
+            return response;
+        }
 
         public async Task<bool> UserExists(string username)
         {

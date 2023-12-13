@@ -57,9 +57,9 @@ namespace UserMicroservice.Controllers
         }
 
         [HttpGet("check")]
-        public async Task<ActionResult<bool>> CheckAuth(GetUserDto getUserDto)
+        public ActionResult<bool> CheckAuth()
         {
-            var response = await _authRepo.UserExists(getUserDto.Username);
+            var response = _authRepo.CheckAuth();
             //if (!response.Success)
             //{
             //    return BadRequest(response);

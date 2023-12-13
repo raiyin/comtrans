@@ -26,7 +26,7 @@ export const authReducer = (state = initialState, action: AuthAction): AuthState
         case AuthActionTypes.LOGOUT:
             return { ...state, currentUser: action.payload.currentUser };
         case AuthActionTypes.CHECKAUTH:
-            return { ...state, currentUser: action.payload.currentUser };
+            return { ...state, isAuth: action.payload.isAuth };
         default:
             return state;
     }
