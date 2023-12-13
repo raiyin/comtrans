@@ -9,7 +9,7 @@ import { API_URL } from "../../http";
 export const register = (registerData: RegisterData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING });
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: true });
             const response = await AuthService.registration(registerData);
             dispatch({
                 type: AuthActionTypes.REGISTER_SUCCESS,
@@ -20,10 +20,13 @@ export const register = (registerData: RegisterData) => {
                 }
             });
         } catch (e: any) {
-            console.log(e.response?.data?.message);
+            console.log('Error while registration is: ' + e.response?.data?.message);
             dispatch({
                 type: AuthActionTypes.REGISTRATION_ERROR
             });
+        }
+        finally {
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: false });
         }
     };
 };
@@ -31,8 +34,7 @@ export const register = (registerData: RegisterData) => {
 export const login = (loginData: LoginData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            console.log(`sending...`);
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING });
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: true });
             const response = await AuthService.login(loginData.email, loginData.password);
             const user = response.data.data;
             localStorage.setItem('token', user.token);
@@ -45,10 +47,13 @@ export const login = (loginData: LoginData) => {
                 }
             });
         } catch (e: any) {
-            console.log(`error ${e.response}`);
+            console.log(`Error while login is: ${e.response}`);
             dispatch({
                 type: AuthActionTypes.LOGIN_ERROR
             });
+        }
+        finally {
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: false });
         }
     };
 };
@@ -56,7 +61,7 @@ export const login = (loginData: LoginData) => {
 export const logout = () => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING });
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: true });
             await AuthService.logout();
             localStorage.removeItem('token');
             dispatch({
@@ -68,30 +73,49 @@ export const logout = () => {
                 }
             });
         } catch (e: any) {
-            console.log(e.response?.data?.message);
+            console.log('Error while logout is: ' + e.response?.data?.message);
         }
     };
 };
 
 export const checkAuth = () => {
     return async (dispatch: Dispatch<AuthAction>) => {
+        dispatch({
+            type: AuthActionTypes.AUTH_PROCCESSING,
+            payload: true
+        });
         try {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING });
-            const response = await axios.get<AuthResponse>(`${API_URL}/refresh`, { withCredentials: true });
-            localStorage.setItem('token', response.data.token);
-            dispatch({
-                type: AuthActionTypes.LOGIN_SUCCESS,
-                payload: {
-                    currentUser: response.data.user,
-                    isAuth: true,
-                    isProccessing: false,
-                }
-            });
+            const response = await AuthService.checkAuth();
+            // TODO проверить на 401
+            const isLoggedIn = response.data;
+            if (isLoggedIn) {
+                dispatch({
+                    type: AuthActionTypes.CHECKAUTH,
+                    payload: {
+                        isAuth: true,
+                        isProccessing: false
+                    }
+                });
+            }
+            else {
+                dispatch({
+                    type: AuthActionTypes.CHECKAUTH,
+                    payload: {
+                        isAuth: false,
+                        isProccessing: false
+                    }
+                });
+            }
+
+
         } catch (e: any) {
-            console.log(e.response?.data?.message);
+            console.log('Error while checkauth is: ' + JSON.stringify(e));
             dispatch({
                 type: AuthActionTypes.LOGIN_ERROR
             });
+        }
+        finally {
+            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: false });
         }
     };
 };

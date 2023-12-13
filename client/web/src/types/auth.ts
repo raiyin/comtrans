@@ -6,6 +6,11 @@ export interface AuthState {
     isProccessing: boolean;
 }
 
+export interface CheckAuthState {
+    isProccessing: boolean;
+    isAuth: boolean;
+}
+
 export interface RegisterData {
     username: string;
     password: string;
@@ -32,6 +37,7 @@ export enum AuthActionTypes {
 
 interface AuthProccessingAction {
     type: AuthActionTypes.AUTH_PROCCESSING;
+    payload: boolean;
 }
 
 interface RegisterAction {
@@ -69,7 +75,7 @@ interface LogoutAction {
 
 interface CheckAuthAction {
     type: AuthActionTypes.CHECKAUTH;
-    payload: AuthState;
+    payload: CheckAuthState;
 }
 
 export type AuthAction =

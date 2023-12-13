@@ -14,7 +14,7 @@ const initialState: AuthState = {
 export const authReducer = (state = initialState, action: AuthAction): AuthState => {
     switch (action.type) {
         case AuthActionTypes.AUTH_PROCCESSING:
-            return { ...state, isProccessing: true };
+            return { ...state, isProccessing: action.payload };
         case AuthActionTypes.REGISTER_SUCCESS:
             return { ...state, isProccessing: false };
         case AuthActionTypes.ACTIVATE:
@@ -26,7 +26,7 @@ export const authReducer = (state = initialState, action: AuthAction): AuthState
         case AuthActionTypes.LOGOUT:
             return { ...state, currentUser: action.payload.currentUser };
         case AuthActionTypes.CHECKAUTH:
-            return { ...state, currentUser: action.payload.currentUser };
+            return { ...state, isAuth: action.payload.isAuth };
         default:
             return state;
     }

@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 using UserMicroservice.Data;
 using UserMicroservice.Dtos.User;
 using UserMicroservice.Model;
@@ -8,6 +10,7 @@ namespace UserMicroservice.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class AuthController : Controller
     {
         private readonly IAuthRepository _authRepo;
@@ -22,6 +25,7 @@ namespace UserMicroservice.Controllers
         }
 
         [HttpPost("register")]
+        [AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
             var response = await _authRepo.Register(
@@ -40,6 +44,7 @@ namespace UserMicroservice.Controllers
         }
 
         [HttpPost("login")]
+        [AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<UserLogginResult>>> Login(UserLoginDto request)
         {
             var response = await _authRepo.Login(request.Email, request.Password);
@@ -47,6 +52,18 @@ namespace UserMicroservice.Controllers
             {
                 return BadRequest(response);
             }
+
+            return Ok(response);
+        }
+
+        [HttpGet("check")]
+        public ActionResult<bool> CheckAuth()
+        {
+            var response = _authRepo.CheckAuth();
+            //if (!response.Success)
+            //{
+            //    return BadRequest(response);
+            //}
 
             return Ok(response);
         }

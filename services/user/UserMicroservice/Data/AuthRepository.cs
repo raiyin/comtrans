@@ -20,23 +20,29 @@ namespace UserMicroservice.Data
         private readonly DataContext _context;
         private readonly IConfiguration _config;
         private readonly IEmailSender _emailSender;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private readonly string separator = "**";
 
         public AuthRepository(
-            IMapper mapper, 
+            IMapper mapper,
             DataContext context,
             IConfiguration configuration,
             IEmailSender emailSender,
-            ILogger<AuthRepository> logger)
+            ILogger<AuthRepository> logger,
+            IHttpContextAccessor httpContextAccessor)
         {
             _mapper = mapper;
             _context = context;
             _config = configuration;
             _emailSender = emailSender;
             _logger = logger;
+            _httpContextAccessor = httpContextAccessor;
         }
+
+        private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext.User
+            .FindFirstValue(ClaimTypes.NameIdentifier));
 
         public async Task<ServiceResponse<int>> Register(User user, string password, string email, string hostValue)
         {
@@ -114,7 +120,7 @@ namespace UserMicroservice.Data
         {
             var response = new ServiceResponse<string>();
             string email = string.Empty;
-            User? user = null; 
+            User? user = null;
             string token;
 
             try
@@ -159,6 +165,35 @@ namespace UserMicroservice.Data
             return response;
         }
 
+        public ServiceResponse<bool> CheckAuth()
+        {
+            var response = new ServiceResponse<bool>();
+            response.Success = true;
+            response.Data = true;
+            return response;
+        }
+
+        public async Task<bool> UserExists(string username)
+        {
+            //var response = new ServiceResponse<bool>();
+            if (await _context.Users.AnyAsync(user => user.Username.ToLower() == username.ToLower()))
+            {
+                //response.Success = true;
+                //response.Data = true;
+                return true;
+            }
+            //
+            // return response;
+            return false;
+        }
+
+        public async Task<ServiceResponse<string>> Refresh(string token)
+        {
+            var response = new ServiceResponse<string>();
+
+            return response;
+        }
+
         private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA256(passwordSalt))
@@ -173,7 +208,7 @@ namespace UserMicroservice.Data
             List<Claim> claims = new List<Claim>()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                //new Claim(ClaimTypes.Name, user.Login                
+                //new Claim(ClaimTypes.Name, user.                
                 new Claim(ClaimTypes.Email, user.Email)
             };
 
@@ -203,20 +238,12 @@ namespace UserMicroservice.Data
             }
         }
 
-        public async Task<bool> UserExists(string username)
-        {
-            if (await _context.Users.AnyAsync(user => user.Username.ToLower() == username.ToLower()))
-            {
-                return true;
-            }
-            return false;
-        }
-
         private string CreatePRGActivationLink(string email)
         {
             string emailBase58String = Base58.Bitcoin.Encode(Encoding.UTF8.GetBytes(email));
             var randomString = Base58.Bitcoin.Encode(RandomNumberGenerator.GetBytes(100));
             return emailBase58String + separator + randomString;
         }
+
     }
 }

@@ -17,6 +17,7 @@ const Header = () => {
     const [mobileOpen, setMobileOpen] = useState(false);
     const currentUser = useTypedSelector(state => state.authStateReducer.currentUser);
     const isAuth = useTypedSelector(state => state.authStateReducer.isAuth);
+    const isProccessing = useTypedSelector(state => state.authStateReducer.isProccessing);
 
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
@@ -118,26 +119,30 @@ const Header = () => {
                         </Box>
 
 
-                        {isAuth ?
-                            <>
-                                <Avatar sx={{ bgcolor: deepOrange[500] }}>
-                                    {currentUser.username[0]}
-                                </Avatar>
-                            </> :
-                            <>
-                                <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                                    {navItems.map((item: string) => (
-                                        <Button
-                                            key={item}
-                                            sx={{ color: '#fff' }}
-                                            onClick={() => navigate(item)}
-                                        >
-                                            {item}
-                                        </Button>
-                                    ))}
-                                </Box>
-                            </>
+                        {
+                            isProccessing ?
+                                <></> :
+                                isAuth ?
+                                    <>
+                                        <Avatar sx={{ bgcolor: deepOrange[500] }}>
+                                            {currentUser.username[0]}
+                                        </Avatar>
+                                    </> :
+                                    <>
+                                        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                                            {navItems.map((item: string) => (
+                                                <Button
+                                                    key={item}
+                                                    sx={{ color: '#fff' }}
+                                                    onClick={() => navigate(item)}
+                                                >
+                                                    {item}
+                                                </Button>
+                                            ))}
+                                        </Box>
+                                    </>
                         }
+
 
                     </Toolbar>
                 </AppBar>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './styles/App.css';
 import AppRouter from './router/AppRouter';
 import Header from './components/Header/Header';
@@ -7,11 +7,23 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import { useActions } from './hooks/useActions';
 
 
 function App() {
+
+    const {
+        checkAuth
+    } = useActions();
+
+    useEffect(() => {
+        if (localStorage.getItem('token')) {
+            checkAuth();
+        }
+    }, []);
+
     return (
-        <div className="App">
+        <div className="app">
             <Header />
             <AppRouter />
             <Footer />
