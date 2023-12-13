@@ -8,8 +8,8 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import { deepOrange, deepPurple } from '@mui/material/colors';
+import AuthBar from '../AuthBar/AuthBar';
 
-const navItems = ['login', 'signup'];
 
 const Header = () => {
 
@@ -123,24 +123,11 @@ const Header = () => {
                             isProccessing ?
                                 <></> :
                                 isAuth ?
-                                    <>
-                                        <Avatar sx={{ bgcolor: deepOrange[500] }}>
-                                            {currentUser.username[0]}
-                                        </Avatar>
-                                    </> :
-                                    <>
-                                        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                                            {navItems.map((item: string) => (
-                                                <Button
-                                                    key={item}
-                                                    sx={{ color: '#fff' }}
-                                                    onClick={() => navigate(item)}
-                                                >
-                                                    {item}
-                                                </Button>
-                                            ))}
-                                        </Box>
-                                    </>
+                                    <Avatar sx={{ bgcolor: deepOrange[500] }}>
+                                        {currentUser.username[0]}
+                                    </Avatar>
+                                    :
+                                    <AuthBar />
                         }
 
 
