@@ -1,13 +1,21 @@
 import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import cl from './signup.module.scss';
-import { Alert, Button, FormControl, Snackbar, TextField } from '@mui/material';
+import { Alert, Button, CircularProgress, FormControl, Snackbar, TextField } from '@mui/material';
 import validateEmail from '../../utils/email';
 import { RegisterData } from '../../types/auth';
 import AuthService from '../../services/AuthService';
+import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 
 const Signup = () => {
+
+    const {
+        register
+    } = useActions();
+    // const isProccessing = useTypedSelector(state => state.authStateReducer.isProccessing);
+    const authState = useTypedSelector(state => state.authStateReducer.authState);
 
     const [username, setUsername] = useState('');
     const [wasUsernameModified, setWasUsernameModified] = useState(false);
@@ -27,7 +35,6 @@ const Signup = () => {
     const [alertMessage, setAlertMessage] = useState('');
 
     const navigate = useNavigate();
-
 
     const usernameChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setWasUsernameModified(true);
@@ -92,8 +99,8 @@ const Signup = () => {
             username: username, password, email
         };
 
-        //const result = await register(registerData);
-        const result = await AuthService.registration(registerData);
+        //const result = await AuthService.registration(registerData);
+        const result = register(registerData);
 
         if (!result) {
             setAlertMessage(() => 'Ошибка регистрации пользователя.');
@@ -105,98 +112,108 @@ const Signup = () => {
         navigate('/activation/needed', { replace: true });
     };
 
-    return (
 
-        <div className={cl['signup']} >
+    if (authState) {
+        return (
+            <CircularProgress variant="indeterminate" />
+        )
+    }
+    else {
 
-            <FormControl className={cl['signup-form']}
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    padding: '20px'
-                }}
-            >
+        return (
 
-                <span className={cl['signup-form__header']}>
-                    Welcome
-                </span>
+            <div className={cl['signup']} >
 
-                <TextField
-                    sx={{ width: '300px', marginTop: '20px' }}
-                    id={`username`}
-                    label="Username"
-                    variant="outlined"
-                    required
-                    size="small"
-                    value={username}
-                    onChange={usernameChangeHandler}
-                />
-
-                <TextField
-                    sx={{ width: '300px', marginTop: '20px' }}
-                    id={`email`}
-                    label="Email"
-                    variant="outlined"
-                    value={email}
-                    size="small"
-                    required
-                    helperText={emailErrorText}
-                    onChange={emailChangeHandler}
-                />
-
-                <TextField
-                    sx={{ width: '300px', marginTop: '20px' }}
-                    id={`password`}
-                    label="Password"
-                    type="password"
-                    variant="outlined"
-                    value={password}
-                    size="small"
-                    required
-                    // helperText={password === "" && wasPasswordModified ? 'Empty field!' : ' '}
-                    onChange={passwordChangeHandler}
-                />
-
-                <TextField
-                    sx={{ width: '300px', marginTop: '20px' }}
-                    id={`confirm_password`}
-                    label="Confirm password"
-                    type="password"
-                    variant="outlined"
-                    value={confirmPassword}
-                    size="small"
-                    required
-                    helperText={passwordErrorText}
-                    onChange={confirmPasswordChangeHandler}
-                />
-
-                <Button
-                    sx={{ marginTop: '20px' }}
-                    variant="outlined"
-                    type="submit"
-                    onClick={(event) => registerUser(event)}
+                <FormControl className={cl['signup-form']}
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        flexDirection: 'column',
+                        padding: '20px'
+                    }}
                 >
-                    Sign up
-                </Button>
 
-            </FormControl>
+                    <span className={cl['signup-form__header']}>
+                        Welcome
+                    </span>
 
-            <Snackbar
-                open={alertOpenState}
-                autoHideDuration={4000}
-                onClose={onAlertSnackbarClose}>
-                <Alert
-                    onClose={onAlertSnackbarClose}
-                    severity="error"
-                    variant="filled"
-                    sx={{ width: '100%' }}>
-                    {alertMessage}
-                </Alert>
-            </Snackbar>
-        </div >
-    );
+                    <TextField
+                        sx={{ width: '300px', marginTop: '20px' }}
+                        id={`username`}
+                        label="Username"
+                        variant="outlined"
+                        required
+                        size="small"
+                        value={username}
+                        onChange={usernameChangeHandler}
+                    />
+
+                    <TextField
+                        sx={{ width: '300px', marginTop: '20px' }}
+                        id={`email`}
+                        label="Email"
+                        variant="outlined"
+                        value={email}
+                        size="small"
+                        required
+                        helperText={emailErrorText}
+                        onChange={emailChangeHandler}
+                    />
+
+                    <TextField
+                        sx={{ width: '300px', marginTop: '20px' }}
+                        id={`password`}
+                        label="Password"
+                        type="password"
+                        variant="outlined"
+                        value={password}
+                        size="small"
+                        required
+                        // helperText={password === "" && wasPasswordModified ? 'Empty field!' : ' '}
+                        onChange={passwordChangeHandler}
+                    />
+
+                    <TextField
+                        sx={{ width: '300px', marginTop: '20px' }}
+                        id={`confirm_password`}
+                        label="Confirm password"
+                        type="password"
+                        variant="outlined"
+                        value={confirmPassword}
+                        size="small"
+                        required
+                        helperText={passwordErrorText}
+                        onChange={confirmPasswordChangeHandler}
+                    />
+
+                    <Button
+                        sx={{ marginTop: '20px' }}
+                        variant="outlined"
+                        type="submit"
+                        onClick={(event) => registerUser(event)}
+                    >
+                        Sign up
+                    </Button>
+
+                </FormControl>
+
+                <Snackbar
+                    open={alertOpenState}
+                    autoHideDuration={4000}
+                    onClose={onAlertSnackbarClose}>
+                    <Alert
+                        onClose={onAlertSnackbarClose}
+                        severity="error"
+                        variant="filled"
+                        sx={{ width: '100%' }}>
+                        {alertMessage}
+                    </Alert>
+                </Snackbar>
+            </div >
+        );
+    }
+
 };
 
 export default Signup;

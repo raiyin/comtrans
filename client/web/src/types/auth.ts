@@ -1,14 +1,22 @@
-import { IUser } from "../models/IUser";
+import { IUser, UserDto } from "../models/IUser";
 
-export interface AuthState {
+
+export enum AuthState {
+    Anonym,
+    Signingup,
+    Signedup,
+    Loggingin,
+    Loggedin
+}
+
+export interface AuthenticationState {
     currentUser: IUser;
-    isAuth: boolean;
-    isProccessing: boolean;
+    authState: AuthState;
 }
 
 export interface CheckAuthState {
-    isProccessing: boolean;
-    isAuth: boolean;
+    currentUser: UserDto;
+    // authState: AuthState;
 }
 
 export interface RegisterData {
@@ -25,11 +33,10 @@ export interface LoginData {
 export enum AuthActionTypes {
     REGISTER = 'REGISTER',
     AUTH_PROCCESSING = 'AUTH_PROCCESSING',
-    REGISTER_SUCCESS = 'REGISTER_SUCCESS',
+    REGISTRATION_SUCCESS = 'REGISTRATION_SUCCESS',
     REGISTRATION_ERROR = 'REGISTRATION_ERROR',
     ACTIVATE = 'ACTIVATE',
-    LOGIN_SUCCESS = 'LOGIN_SUCCESS',
-    LOGIN_ERROR = 'LOGIN_ERROR',
+    LOGGED_IN = 'LOGGED_IN',
     LOGOUT = 'LOGOUT',
     CHECKAUTH = 'CHECKAUTH'
 }
@@ -50,27 +57,23 @@ interface RegistrationErrorAction {
 }
 
 interface RegistrationSuccessAction {
-    type: AuthActionTypes.REGISTER_SUCCESS;
-    payload: AuthState;
+    type: AuthActionTypes.REGISTRATION_SUCCESS;
+    payload: AuthenticationState;
 }
 
 interface ActiveteAction {
     type: AuthActionTypes.ACTIVATE;
-    payload: AuthState;
+    payload: AuthenticationState;
 }
 
 interface LoginSaccessAction {
-    type: AuthActionTypes.LOGIN_SUCCESS;
-    payload: AuthState;
-}
-
-interface LoginErrorAction {
-    type: AuthActionTypes.LOGIN_ERROR;
+    type: AuthActionTypes.LOGGED_IN;
+    payload: AuthenticationState;
 }
 
 interface LogoutAction {
     type: AuthActionTypes.LOGOUT;
-    payload: AuthState;
+    payload: AuthenticationState;
 }
 
 interface CheckAuthAction {
@@ -84,7 +87,6 @@ export type AuthAction =
     | RegistrationErrorAction
     | RegistrationSuccessAction
     | LoginSaccessAction
-    | LoginErrorAction
     | ActiveteAction
     | LogoutAction
     | CheckAuthAction;

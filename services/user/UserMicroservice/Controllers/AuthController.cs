@@ -43,6 +43,20 @@ namespace UserMicroservice.Controllers
             return Ok(response);
         }
 
+        [HttpGet("activate/{activationString}")]
+        public async Task<ActionResult<ServiceResponse<int>>> Activate(string activationString)
+        {
+            var response = await _authRepo.Activate(activationString);
+            if (!response.Success)
+            {
+                //return BadRequest(response);
+
+                return Redirect(_configuration.GetSection("AppSettings:ClientUrl").Value + "/activation/failure");
+            }
+
+            return Redirect(_configuration.GetSection("AppSettings:ClientUrl").Value + "/activation/success");
+        }
+
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<UserLogginResult>>> Login(UserLoginDto request)
@@ -57,29 +71,15 @@ namespace UserMicroservice.Controllers
         }
 
         [HttpGet("check")]
-        public ActionResult<bool> CheckAuth()
+        public async Task<ActionResult<ServiceResponse<UserDto>>> CheckAuth()
         {
-            var response = _authRepo.CheckAuth();
-            //if (!response.Success)
-            //{
-            //    return BadRequest(response);
-            //}
-
-            return Ok(response);
-        }
-
-        [HttpGet("activate/{activationString}")]
-        public async Task<ActionResult<ServiceResponse<int>>> Activate(string activationString)
-        {
-            var response = await _authRepo.Activate(activationString);
+            var response = await _authRepo.CheckAuth();
             if (!response.Success)
             {
-                //return BadRequest(response);
-
-                return Redirect(_configuration.GetSection("AppSettings:ClientUrl").Value + "/activation/failure");
+                return BadRequest(response);
             }
 
-            return Redirect(_configuration.GetSection("AppSettings:ClientUrl").Value + "/activation/success");
+            return Ok(response);
         }
     }
 }

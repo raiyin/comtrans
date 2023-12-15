@@ -4,3 +4,9 @@ export interface IUser {
     isActivated: boolean;
     token: string;
 }
+
+export interface UserDto {
+    username: string;
+    email: string;
+    isActivated: boolean;
+}

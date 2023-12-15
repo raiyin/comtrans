@@ -9,6 +9,7 @@ import Avatar from '@mui/material/Avatar';
 import Stack from '@mui/material/Stack';
 import { deepOrange, deepPurple } from '@mui/material/colors';
 import AuthBar from '../AuthBar/AuthBar';
+import { AuthState } from '../../types/auth';
 
 
 const Header = () => {
@@ -16,8 +17,8 @@ const Header = () => {
     const navigate = useNavigate();
     const [mobileOpen, setMobileOpen] = useState(false);
     const currentUser = useTypedSelector(state => state.authStateReducer.currentUser);
-    const isAuth = useTypedSelector(state => state.authStateReducer.isAuth);
-    const isProccessing = useTypedSelector(state => state.authStateReducer.isProccessing);
+    const isAuth = useTypedSelector(state => state.authStateReducer.authState);
+    const authState = useTypedSelector(state => state.authStateReducer.authState);
 
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
@@ -120,9 +121,9 @@ const Header = () => {
 
 
                         {
-                            isProccessing ?
+                            authState ?
                                 <></> :
-                                isAuth ?
+                                isAuth === AuthState.Loggedin ?
                                     <Avatar sx={{ bgcolor: deepOrange[500] }}>
                                         {currentUser.username[0]}
                                     </Avatar>

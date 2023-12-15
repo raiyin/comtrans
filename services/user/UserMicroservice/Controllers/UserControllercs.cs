@@ -21,21 +21,21 @@ namespace UserMicroservice.Controllers
 
         [HttpGet]
         [Route("getall")]
-        public async Task<ActionResult<ServiceResponse<IEnumerable<GetUserDto>>>> UserList()
+        public async Task<ActionResult<ServiceResponse<IEnumerable<UserDto>>>> UserList()
         {
             var userList = await _userService.GetUserList();
             return Ok(userList);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<GetUserDto>>> GetUserById(int id)
+        public async Task<ActionResult<ServiceResponse<UserDto>>> GetUserById(int id)
         {
             return Ok(await _userService.GetUserById(id));
         }
 
 
         [HttpPut]
-        public async Task<ActionResult<ServiceResponse<GetUserDto>>> UpdateUser(UpdateUserDto user)
+        public async Task<ActionResult<ServiceResponse<UserDto>>> UpdateUser(UpdateUserDto user)
         {
             return Ok(await _userService.UpdateUser(user));
         }

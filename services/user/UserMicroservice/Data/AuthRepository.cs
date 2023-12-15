@@ -165,11 +165,13 @@ namespace UserMicroservice.Data
             return response;
         }
 
-        public ServiceResponse<bool> CheckAuth()
+        public async Task<ServiceResponse<UserDto>> CheckAuth()
         {
-            var response = new ServiceResponse<bool>();
+            var response = new ServiceResponse<UserDto>();
+            int userId = GetUserId();
+            var userDbInfo = await _context.Users.FirstOrDefaultAsync(user => user.Id == userId);
+            response.Data = _mapper.Map<UserDto>(userDbInfo);
             response.Success = true;
-            response.Data = true;
             return response;
         }
 

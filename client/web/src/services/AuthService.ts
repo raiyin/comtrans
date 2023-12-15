@@ -2,6 +2,7 @@ import $api from "../http";
 import { AxiosResponse } from 'axios';
 import { AuthResponse, LoginResponse } from "../models/response/AuthResponse";
 import { RegisterData } from "../types/auth";
+import { IUser, UserDto } from "../models/IUser";
 
 export default class AuthService {
 
@@ -18,7 +19,7 @@ export default class AuthService {
         return $api.post('/auth/logout');
     }
 
-    static async checkAuth(): Promise<AxiosResponse<boolean>> {
-        return $api.get<boolean>('/auth/check');
+    static async checkAuth(): Promise<AxiosResponse<UserDto>> {
+        return $api.get<UserDto>('/auth/check');
     }
 }
