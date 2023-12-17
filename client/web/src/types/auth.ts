@@ -16,7 +16,7 @@ export interface AuthenticationState {
 
 export interface CheckAuthState {
     currentUser: UserDto;
-    // authState: AuthState;
+    authState: AuthState;
 }
 
 export interface RegisterData {

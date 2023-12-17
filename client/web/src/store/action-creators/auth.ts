@@ -91,6 +91,7 @@ export const checkAuth = () => {
                     type: AuthActionTypes.CHECKAUTH,
                     payload: {
                         currentUser: response.data,
+                        authState: AuthState.Loggedin
                     }
                 });
             }
@@ -99,6 +100,7 @@ export const checkAuth = () => {
                     type: AuthActionTypes.CHECKAUTH,
                     payload: {
                         currentUser: {} as UserDto,
+                        authState: AuthState.Anonym
                     }
                 });
             }
