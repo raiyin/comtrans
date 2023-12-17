@@ -14,7 +14,7 @@ export const register = (registerData: RegisterData) => {
             dispatch({
                 type: AuthActionTypes.REGISTRATION_SUCCESS,
                 payload: {
-                    currentUser: response.data.user,
+                    currentUser: { ...response.data.data },
                     authState: AuthState.Signedup,
                 }
             });

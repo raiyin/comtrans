@@ -4,8 +4,7 @@ const initialState: AuthenticationState = {
     currentUser: {
         username: '',
         email: '',
-        isActivated: false,
-        token: ''
+        isActivated: false
     },
     authState: AuthState.Anonym
 };
@@ -28,8 +27,7 @@ export const authReducer = (state = initialState, action: AuthAction): Authentic
             return {
                 ...state,
                 currentUser: {
-                    ...action.payload.currentUser,
-                    token: state.currentUser.token
+                    ...action.payload.currentUser
                 },
                 authState: action.payload.authState
             };
