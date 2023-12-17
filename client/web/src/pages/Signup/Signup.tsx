@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import cl from './signup.module.scss';
 import { Alert, Button, CircularProgress, FormControl, Snackbar, TextField } from '@mui/material';
 import validateEmail from '../../utils/email';
-import { RegisterData } from '../../types/auth';
+import { AuthState, RegisterData } from '../../types/auth';
 import AuthService from '../../services/AuthService';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
@@ -14,7 +14,6 @@ const Signup = () => {
     const {
         register
     } = useActions();
-    // const isProccessing = useTypedSelector(state => state.authStateReducer.isProccessing);
     const authState = useTypedSelector(state => state.authStateReducer.authState);
 
     const [username, setUsername] = useState('');
@@ -112,6 +111,9 @@ const Signup = () => {
         navigate('/activation/needed', { replace: true });
     };
 
+    if (authState !== AuthState.Anonym) {
+        navigate('/', { replace: true });
+    }
 
     if (authState) {
         return (
