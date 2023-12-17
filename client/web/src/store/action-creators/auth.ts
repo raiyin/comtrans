@@ -1,7 +1,6 @@
 import axios from "axios";
-import { IUser, UserDto } from "../../models/IUser";
 import AuthService from "../../services/AuthService";
-import { AuthAction, AuthActionTypes, RegisterData, LoginData, AuthState, AuthenticationState } from "../../types/auth";
+import { AuthAction, AuthActionTypes, RegisterData, LoginData, AuthState, AuthenticationState, UserDto } from "../../types/auth";
 import { Dispatch } from 'redux';
 import { AuthResponse } from "../../models/response/AuthResponse";
 import { API_URL } from "../../http";
@@ -66,7 +65,7 @@ export const logout = () => {
             dispatch({
                 type: AuthActionTypes.LOGOUT,
                 payload: {
-                    currentUser: {} as IUser,
+                    currentUser: {} as UserDto,
                     authState: AuthState.Anonym,
                 }
             });

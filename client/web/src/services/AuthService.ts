@@ -1,8 +1,7 @@
 import $api from "../http";
 import { AxiosResponse } from 'axios';
 import { AuthResponse, LoginResponse } from "../models/response/AuthResponse";
-import { RegisterData } from "../types/auth";
-import { IUser, UserDto } from "../models/IUser";
+import { RegisterData, UserDto } from "../types/auth";
 
 export default class AuthService {
 

@@ -1,9 +1,10 @@
-import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
+import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import cl from './login.module.scss';
 import { Alert, Button, FormControl, Snackbar, TextField } from '@mui/material';
-import { LoginData } from '../../types/auth';
+import { AuthState, LoginData } from '../../types/auth';
 import { useNavigate } from "react-router-dom";
 import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 
 const Login = () => {
@@ -13,9 +14,18 @@ const Login = () => {
     const [alertOpenState, setAlertOpenState] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const navigate = useNavigate();
+
+    const authState = useTypedSelector(state => state.authStateReducer.authState);
     const {
         login
     } = useActions();
+
+    // useEffect(() => {
+    //     if (authState !== AuthState.Anonym) {
+    //         navigate('/', { replace: true });
+    //     }
+    // }, []);
+
 
     const onAlertSnackbarClose = (_event?: SyntheticEvent | Event, reason?: string) => {
         if (reason === 'clickaway') {
@@ -58,6 +68,11 @@ const Login = () => {
 
     function onPasswordChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
         setPassword(() => e.target.value);
+    }
+
+
+    if (authState !== AuthState.Anonym) {
+        navigate('/', { replace: true });
     }
 
     return (

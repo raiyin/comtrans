@@ -1,5 +1,9 @@
-import { IUser, UserDto } from "../models/IUser";
 
+export interface UserDto {
+    username: string;
+    email: string;
+    isActivated: boolean;
+}
 
 export enum AuthState {
     Anonym,
@@ -10,7 +14,7 @@ export enum AuthState {
 }
 
 export interface AuthenticationState {
-    currentUser: IUser;
+    currentUser: UserDto;
     authState: AuthState;
 }
 

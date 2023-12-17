@@ -1,22 +1,17 @@
-import { IUser } from "../IUser";
-
-// export interface AuthResponse {
-//     token: string;
-//     user: IUser;
-// }
+import { UserDto } from "../../types/auth";
 
 interface Token {
     token: string
 }
 
 export interface AuthResponse {
-    data: Token & IUser;
+    data: Token & UserDto;
     success: boolean;
     message: string;
 }
 
 export type LoginResponse = {
-    data: Token & IUser;
+    data: Token & UserDto;
     success: boolean;
     message: string;
 };
