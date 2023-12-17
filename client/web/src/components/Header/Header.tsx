@@ -121,14 +121,12 @@ const Header = () => {
 
 
                         {
-                            authState ?
-                                <></> :
-                                isAuth === AuthState.Loggedin ?
-                                    <Avatar sx={{ bgcolor: deepOrange[500] }}>
-                                        {currentUser.username[0]}
-                                    </Avatar>
-                                    :
-                                    <AuthBar />
+                            isAuth === AuthState.Loggedin ?
+                                <Avatar sx={{ bgcolor: deepOrange[500] }}>
+                                    {currentUser.username}
+                                </Avatar>
+                                :
+                                <AuthBar />
                         }
 
 

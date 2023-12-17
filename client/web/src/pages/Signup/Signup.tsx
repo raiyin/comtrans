@@ -115,7 +115,7 @@ const Signup = () => {
         navigate('/', { replace: true });
     }
 
-    if (authState) {
+    if (authState === AuthState.Signingup) {
         return (
             <CircularProgress variant="indeterminate" />
         )

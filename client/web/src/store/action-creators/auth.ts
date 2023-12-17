@@ -8,7 +8,10 @@ import { API_URL } from "../../http";
 export const register = (registerData: RegisterData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: true });
+            dispatch({
+                type: AuthActionTypes.AUTH_PROCCESSING,
+                payload: AuthState.Signingup
+            });
             const response = await AuthService.registration(registerData);
             dispatch({
                 type: AuthActionTypes.REGISTRATION_SUCCESS,
@@ -23,16 +26,16 @@ export const register = (registerData: RegisterData) => {
                 type: AuthActionTypes.REGISTRATION_ERROR
             });
         }
-        finally {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: false });
-        }
     };
 };
 
 export const login = (loginData: LoginData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: true });
+            dispatch({
+                type: AuthActionTypes.AUTH_PROCCESSING,
+                payload: AuthState.Loggingin
+            });
             const response = await AuthService.login(loginData.email, loginData.password);
             const user = response.data.data;
             localStorage.setItem('token', user.token);
@@ -50,16 +53,16 @@ export const login = (loginData: LoginData) => {
                 payload: {} as AuthenticationState
             });
         }
-        finally {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: false });
-        }
     };
 };
 
 export const logout = () => {
     return async (dispatch: Dispatch<AuthAction>) => {
         try {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: true });
+            dispatch({
+                type: AuthActionTypes.AUTH_PROCCESSING,
+                payload: AuthState.Loggingin
+            });
             await AuthService.logout();
             localStorage.removeItem('token');
             dispatch({
@@ -79,7 +82,7 @@ export const checkAuth = () => {
     return async (dispatch: Dispatch<AuthAction>) => {
         dispatch({
             type: AuthActionTypes.AUTH_PROCCESSING,
-            payload: true
+            payload: AuthState.Loggingin
         });
         try {
             const response = await AuthService.checkAuth();
@@ -103,17 +106,12 @@ export const checkAuth = () => {
                     }
                 });
             }
-
-
         } catch (e: any) {
             console.log('Error while checkauth is: ' + JSON.stringify(e));
             dispatch({
                 type: AuthActionTypes.LOGOUT,
                 payload: {} as AuthenticationState
             });
-        }
-        finally {
-            dispatch({ type: AuthActionTypes.AUTH_PROCCESSING, payload: false });
         }
     };
 };

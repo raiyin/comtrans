@@ -6,11 +6,11 @@ export interface UserDto {
 }
 
 export enum AuthState {
-    Anonym,
-    Signingup,
-    Signedup,
-    Loggingin,
-    Loggedin
+    Anonym = 1,
+    Signingup = 2,
+    Signedup = 3,
+    Loggingin = 4,
+    Loggedin = 5
 }
 
 export interface AuthenticationState {
@@ -48,7 +48,7 @@ export enum AuthActionTypes {
 
 interface AuthProccessingAction {
     type: AuthActionTypes.AUTH_PROCCESSING;
-    payload: boolean;
+    payload: AuthState;
 }
 
 interface RegisterAction {
