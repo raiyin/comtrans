@@ -28,6 +28,13 @@ namespace UserMicroservice.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
+            if (string.IsNullOrEmpty(request.Username) ||
+                string.IsNullOrEmpty(request.Password) ||
+                string.IsNullOrEmpty(request.Email))
+            {
+                return BadRequest("Insufficient data in the request");
+            }
+
             var response = await _authRepo.Register(
                 new User { Username = request.Username },
                 request.Password,
@@ -46,6 +53,11 @@ namespace UserMicroservice.Controllers
         [HttpGet("activate/{activationString}")]
         public async Task<ActionResult<ServiceResponse<int>>> Activate(string activationString)
         {
+            if (string.IsNullOrEmpty(activationString))
+            {
+                return BadRequest("Empty activation string");
+            }
+
             var response = await _authRepo.Activate(activationString);
             if (!response.Success)
             {
@@ -61,6 +73,12 @@ namespace UserMicroservice.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<UserLogginResult>>> Login(UserLoginDto request)
         {
+            if (string.IsNullOrEmpty(request.Password) ||
+                string.IsNullOrEmpty(request.Email))
+            {
+                return BadRequest("Insufficient data in the request");
+            }
+
             var response = await _authRepo.Login(request.Email, request.Password);
             if (!response.Success)
             {
