@@ -1,9 +1,6 @@
-import axios from "axios";
 import AuthService from "../../services/AuthService";
-import { AuthAction, AuthActionTypes, RegisterData, LoginData, AuthState, AuthenticationState, UserDto } from "../../types/auth";
+import { AuthAction, AuthActionTypes, RegisterData, LoginData, AuthState, AuthenticationState, UserDto, IUser } from "../../types/auth";
 import { Dispatch } from 'redux';
-import { AuthResponse } from "../../models/response/AuthResponse";
-import { API_URL } from "../../http";
 
 export const register = (registerData: RegisterData) => {
     return async (dispatch: Dispatch<AuthAction>) => {
@@ -13,13 +10,11 @@ export const register = (registerData: RegisterData) => {
                 payload: AuthState.Signingup
             });
             const response = await AuthService.registration(registerData.email, registerData.password, registerData.username);
-            console.log(JSON.stringify(response.data))
             dispatch({
                 type: AuthActionTypes.REGISTRATION_SUCCESS,
                 payload: AuthState.Signedup
             });
         } catch (e: any) {
-            console.log('Error while registration is: ' + e.response?.data?.message);
             dispatch({
                 type: AuthActionTypes.LOGOUT,
                 payload: {
@@ -43,8 +38,9 @@ export const login = (loginData: LoginData) => {
                 payload: AuthState.Loggingin
             });
             const response = await AuthService.login(loginData.email, loginData.password);
-            const user = response.data.data;
-            localStorage.setItem('token', user.token);
+            const responseData = response.data.data;
+            const { token, ...user } = responseData;
+            localStorage.setItem('token', token);
             dispatch({
                 type: AuthActionTypes.LOGGED_IN,
                 payload: {
@@ -81,7 +77,7 @@ export const logout = () => {
             dispatch({
                 type: AuthActionTypes.LOGOUT,
                 payload: {
-                    currentUser: {} as UserDto,
+                    currentUser: {} as IUser,
                     authState: AuthState.Anonym,
                 }
             });
@@ -102,10 +98,11 @@ export const checkAuth = () => {
             // TODO проверить на 401
             const isLoggedIn = true; // так как сервер выкинет исключение на неавторизованный запрос
             if (isLoggedIn) {
+                console.log('data is: ' + JSON.stringify(response.data))
                 dispatch({
                     type: AuthActionTypes.CHECKAUTH,
                     payload: {
-                        currentUser: response.data,
+                        currentUser: { ...response.data.data },
                         authState: AuthState.Loggedin
                     }
                 });
@@ -114,7 +111,7 @@ export const checkAuth = () => {
                 dispatch({
                     type: AuthActionTypes.CHECKAUTH,
                     payload: {
-                        currentUser: {} as UserDto,
+                        currentUser: {} as IUser,
                         authState: AuthState.Anonym
                     }
                 });

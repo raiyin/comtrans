@@ -1,8 +1,13 @@
-
-export interface UserDto {
+export interface IUser {
     username: string;
     email: string;
     isActivated: boolean;
+}
+
+export interface UserDto {
+    data: IUser,
+    success: boolean;
+    message: string;
 }
 
 export enum AuthState {
@@ -14,12 +19,12 @@ export enum AuthState {
 }
 
 export interface AuthenticationState {
-    currentUser: UserDto;
+    currentUser: IUser;
     authState: AuthState;
 }
 
 export interface CheckAuthState {
-    currentUser: UserDto;
+    currentUser: IUser;
     authState: AuthState;
 }
 
