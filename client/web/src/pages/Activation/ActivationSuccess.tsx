@@ -1,13 +1,20 @@
 import cl from './activationsuccess.module.scss';
 import { Link } from '@mui/material';
-
+import { Navigate } from 'react-router';
+import { AuthState } from '../../types/auth';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 const ActivationSuccess = () => {
+
+    const authState = useTypedSelector(state => state.authStateReducer.authState);
 
     return (
 
         <div className={cl['activation_success']} >
 
+            {authState === AuthState.Loggedin && (
+                <Navigate to="/" replace={true} />
+            )}
             <div className={cl['success-message']}>
                 <h2>
                     Your account was activated successfully!!!
