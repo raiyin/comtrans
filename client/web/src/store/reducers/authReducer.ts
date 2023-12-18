@@ -12,7 +12,10 @@ const initialState: AuthenticationState = {
 export const authReducer = (state = initialState, action: AuthAction): AuthenticationState => {
     switch (action.type) {
         case AuthActionTypes.AUTH_PROCCESSING:
-            return { ...state };
+            return {
+                ...state,
+                authState: action.payload
+            };
         case AuthActionTypes.REGISTRATION_SUCCESS:
             return { ...state };
         case AuthActionTypes.REGISTRATION_ERROR:
@@ -22,7 +25,11 @@ export const authReducer = (state = initialState, action: AuthAction): Authentic
         case AuthActionTypes.LOGGED_IN:
             return { ...action.payload };
         case AuthActionTypes.LOGOUT:
-            return { ...state, currentUser: action.payload.currentUser };
+            return {
+                ...state,
+                currentUser: action.payload.currentUser,
+                authState: action.payload.authState
+            };
         case AuthActionTypes.CHECKAUTH:
             return {
                 ...state,

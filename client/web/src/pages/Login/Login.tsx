@@ -15,14 +15,14 @@ const Login = () => {
     const [alertMessage, setAlertMessage] = useState('');
     const navigate = useNavigate();
     const authState = useTypedSelector(state => state.authStateReducer.authState);
-    const logState = useRef(AuthState.Anonym);
+    // const logState = useRef(AuthState.Anonym);
     const {
         login
     } = useActions();
 
-    useEffect(() => {
-        logState.current = authState;
-    }, [authState]);
+    // useEffect(() => {
+    //     logState.current = authState;
+    // }, [authState]);
 
 
     const onAlertSnackbarClose = (_event?: SyntheticEvent | Event, reason?: string) => {
@@ -51,10 +51,12 @@ const Login = () => {
 
         // TODO обработать в try catch, наверху не перехватывать
         if (authState === AuthState.Loggedin) {
+            console.log('!!! ' + authState)
             clearFields();
             navigate('/', { replace: true });
         }
         else {
+            console.log('+++ ' + authState)
             setAlertMessage(() => 'An error occurred while logging in');
             openAlert();
         }
@@ -68,15 +70,13 @@ const Login = () => {
         setPassword(() => e.target.value);
     }
 
-
-    if (authState !== AuthState.Anonym) {
-        navigate('/', { replace: true });
-    }
-
     // if (authState === AuthState.Loggingin) {
     return (
-        logState.current === AuthState.Loggingin ?
-            <CircularProgress variant="indeterminate" />
+        authState === AuthState.Loggingin ?
+
+            <div className={cl['login']} >
+                <CircularProgress variant="indeterminate" />
+            </div>
             :
             <div className={cl['login']} >
 

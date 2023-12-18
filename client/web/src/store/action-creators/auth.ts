@@ -50,7 +50,14 @@ export const login = (loginData: LoginData) => {
             console.log(`Error while login is: ${e.response}`);
             dispatch({
                 type: AuthActionTypes.LOGOUT,
-                payload: {} as AuthenticationState
+                payload: {
+                    currentUser: {
+                        username: "",
+                        email: "",
+                        isActivated: false,
+                    },
+                    authState: AuthState.Anonym
+                }
             });
         }
     };
