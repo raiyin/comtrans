@@ -9,9 +9,26 @@ export default class AuthService {
         return $api.post<LoginResponse>('/auth/login', { email, password });
     }
 
-    static async registration(registerData: RegisterData): Promise<AxiosResponse<AuthResponse>> {
+    // static async registration(registerData: RegisterData): Promise<AxiosResponse<AuthResponse>> {
+    //     console.log('register data is: ' + JSON.stringify(registerData))
+    //     //static async registration(email: string, password: string): Promise<AxiosResponse<AuthResponse>> {
+    //     return $api.post<AuthResponse>('/auth/register',
+    //         {
+    //             email: registerData.email,
+    //             password: registerData.password,
+    //             username: registerData.username
+    //         });
+    // }
+
+    static async registration(email: string, password: string, username: string): Promise<AxiosResponse<AuthResponse>> {
+        //console.log('register data is: ' + JSON.stringify(registerData))
         //static async registration(email: string, password: string): Promise<AxiosResponse<AuthResponse>> {
-        return $api.post<AuthResponse>('/auth/registration', { registerData });
+        return $api.post<AuthResponse>('/auth/register',
+            {
+                email: email,
+                password: password,
+                username: username
+            });
     }
 
     static async logout(): Promise<void> {

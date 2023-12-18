@@ -95,35 +95,30 @@ const Signup = () => {
     const registerUser = async (event: React.MouseEvent<HTMLElement>) => {
         event.preventDefault();
         const registerData: RegisterData = {
-            username: username, password, email
+            username: username,
+            password: password,
+            email: email
         };
 
-        //const result = await AuthService.registration(registerData);
-        const result = register(registerData);
+        await register(registerData);
 
-        if (!result) {
-            setAlertMessage(() => 'Ошибка регистрации пользователя.');
-            openAlert();
-            return;
+        if (authState === AuthState.Signedup) {
+            clearFields();
+            navigate('/activation/needed', { replace: true });
         }
-
-        clearFields();
-        navigate('/activation/needed', { replace: true });
+        else {
+            setAlertMessage(() => 'An error occurred while signing up');
+            openAlert();
+        }
     };
 
-    if (authState !== AuthState.Anonym) {
-        navigate('/', { replace: true });
-    }
-
-    if (authState === AuthState.Signingup) {
-        return (
-            <CircularProgress variant="indeterminate" />
-        )
-    }
-    else {
-
-        return (
-
+    return (
+        authState === AuthState.Signingup
+            ?
+            <div className={cl['signup']} >
+                <CircularProgress variant="indeterminate" />
+            </div>
+            :
             <div className={cl['signup']} >
 
                 <FormControl className={cl['signup-form']}
@@ -172,7 +167,6 @@ const Signup = () => {
                         value={password}
                         size="small"
                         required
-                        // helperText={password === "" && wasPasswordModified ? 'Empty field!' : ' '}
                         onChange={passwordChangeHandler}
                     />
 
@@ -213,8 +207,7 @@ const Signup = () => {
                     </Alert>
                 </Snackbar>
             </div >
-        );
-    }
+    );
 
 };
 

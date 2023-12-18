@@ -62,7 +62,7 @@ interface RegistrationErrorAction {
 
 interface RegistrationSuccessAction {
     type: AuthActionTypes.REGISTRATION_SUCCESS;
-    payload: AuthenticationState;
+    payload: AuthState;
 }
 
 interface ActiveteAction {

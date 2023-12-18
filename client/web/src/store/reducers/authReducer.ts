@@ -17,7 +17,10 @@ export const authReducer = (state = initialState, action: AuthAction): Authentic
                 authState: action.payload
             };
         case AuthActionTypes.REGISTRATION_SUCCESS:
-            return { ...state };
+            return {
+                ...state,
+                authState: action.payload
+            };
         case AuthActionTypes.REGISTRATION_ERROR:
             return { ...state };
         case AuthActionTypes.ACTIVATE:

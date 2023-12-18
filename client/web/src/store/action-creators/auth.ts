@@ -12,18 +12,24 @@ export const register = (registerData: RegisterData) => {
                 type: AuthActionTypes.AUTH_PROCCESSING,
                 payload: AuthState.Signingup
             });
-            const response = await AuthService.registration(registerData);
+            const response = await AuthService.registration(registerData.email, registerData.password, registerData.username);
+            console.log(JSON.stringify(response.data))
             dispatch({
                 type: AuthActionTypes.REGISTRATION_SUCCESS,
-                payload: {
-                    currentUser: { ...response.data.data },
-                    authState: AuthState.Signedup,
-                }
+                payload: AuthState.Signedup
             });
         } catch (e: any) {
             console.log('Error while registration is: ' + e.response?.data?.message);
             dispatch({
-                type: AuthActionTypes.REGISTRATION_ERROR
+                type: AuthActionTypes.LOGOUT,
+                payload: {
+                    currentUser: {
+                        username: "",
+                        email: "",
+                        isActivated: false,
+                    },
+                    authState: AuthState.Anonym
+                }
             });
         }
     };
