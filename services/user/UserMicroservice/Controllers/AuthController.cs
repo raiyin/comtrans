@@ -28,6 +28,13 @@ namespace UserMicroservice.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<int>>> Register(UserRegisterDto request)
         {
+            if (string.IsNullOrEmpty(request.Username) ||
+                string.IsNullOrEmpty(request.Password) ||
+                string.IsNullOrEmpty(request.Email))
+            {
+                return BadRequest("Insufficient data in the request");
+            }
+
             var response = await _authRepo.Register(
                 new User { Username = request.Username },
                 request.Password,
@@ -43,10 +50,35 @@ namespace UserMicroservice.Controllers
             return Ok(response);
         }
 
+        [HttpGet("activate/{activationString}")]
+        public async Task<ActionResult<ServiceResponse<int>>> Activate(string activationString)
+        {
+            if (string.IsNullOrEmpty(activationString))
+            {
+                return BadRequest("Empty activation string");
+            }
+
+            var response = await _authRepo.Activate(activationString);
+            if (!response.Success)
+            {
+                //return BadRequest(response);
+
+                return Redirect(_configuration.GetSection("AppSettings:ClientUrl").Value + "/activation/failure");
+            }
+
+            return Redirect(_configuration.GetSection("AppSettings:ClientUrl").Value + "/activation/success");
+        }
+
         [HttpPost("login")]
         [AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<UserLogginResult>>> Login(UserLoginDto request)
         {
+            if (string.IsNullOrEmpty(request.Password) ||
+                string.IsNullOrEmpty(request.Email))
+            {
+                return BadRequest("Insufficient data in the request");
+            }
+
             var response = await _authRepo.Login(request.Email, request.Password);
             if (!response.Success)
             {
@@ -57,29 +89,15 @@ namespace UserMicroservice.Controllers
         }
 
         [HttpGet("check")]
-        public ActionResult<bool> CheckAuth()
+        public async Task<ActionResult<ServiceResponse<UserDto>>> CheckAuth()
         {
-            var response = _authRepo.CheckAuth();
-            //if (!response.Success)
-            //{
-            //    return BadRequest(response);
-            //}
-
-            return Ok(response);
-        }
-
-        [HttpGet("activate/{activationString}")]
-        public async Task<ActionResult<ServiceResponse<int>>> Activate(string activationString)
-        {
-            var response = await _authRepo.Activate(activationString);
+            var response = await _authRepo.CheckAuth();
             if (!response.Success)
             {
-                //return BadRequest(response);
-
-                return Redirect(_configuration.GetSection("AppSettings:ClientUrl").Value + "/activation/failure");
+                return BadRequest(response);
             }
 
-            return Redirect(_configuration.GetSection("AppSettings:ClientUrl").Value + "/activation/success");
+            return Ok(response);
         }
     }
 }

@@ -1,13 +1,20 @@
 import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import cl from './signup.module.scss';
-import { Alert, Button, FormControl, Snackbar, TextField } from '@mui/material';
+import { Alert, Button, CircularProgress, FormControl, Snackbar, TextField } from '@mui/material';
 import validateEmail from '../../utils/email';
-import { RegisterData } from '../../types/auth';
+import { AuthState, RegisterData } from '../../types/auth';
 import AuthService from '../../services/AuthService';
+import { useActions } from '../../hooks/useActions';
+import { useTypedSelector } from '../../hooks/useTypedSelector';
 
 
 const Signup = () => {
+
+    const {
+        register
+    } = useActions();
+    const authState = useTypedSelector(state => state.authStateReducer.authState);
 
     const [username, setUsername] = useState('');
     const [wasUsernameModified, setWasUsernameModified] = useState(false);
@@ -27,7 +34,6 @@ const Signup = () => {
     const [alertMessage, setAlertMessage] = useState('');
 
     const navigate = useNavigate();
-
 
     const usernameChangeHandler = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setWasUsernameModified(true);
@@ -87,116 +93,128 @@ const Signup = () => {
     };
 
     const registerUser = async (event: React.MouseEvent<HTMLElement>) => {
+
         event.preventDefault();
         const registerData: RegisterData = {
-            username: username, password, email
+            username: username,
+            password: password,
+            email: email
         };
 
-        //const result = await register(registerData);
-        const result = await AuthService.registration(registerData);
+        await register(registerData);
+        console.log(JSON.stringify(authState))
 
-        if (!result) {
-            setAlertMessage(() => 'Ошибка регистрации пользователя.');
-            openAlert();
-            return;
+        if (authState === AuthState.Signedup) {
+            clearFields();
+            navigate('/activation/needed', { replace: true });
         }
-
-        clearFields();
-        navigate('/activation/needed', { replace: true });
+        else {
+            setAlertMessage(() => 'An error occurred while signing up');
+            openAlert();
+        }
     };
 
     return (
+        <>{
+            authState === AuthState.Signingup
+                ?
+                <div className={cl['signup']} >
+                    <CircularProgress variant="indeterminate" />
+                </div>
+                :
+                <div className={cl['signup']} >
 
-        <div className={cl['signup']} >
+                    <FormControl className={cl['signup-form']}
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexDirection: 'column',
+                            padding: '20px'
+                        }}
+                    >
 
-            <FormControl className={cl['signup-form']}
-                sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexDirection: 'column',
-                    padding: '20px'
-                }}
-            >
+                        <span className={cl['signup-form__header']}>
+                            Welcome
+                        </span>
 
-                <span className={cl['signup-form__header']}>
-                    Welcome
-                </span>
+                        <TextField
+                            sx={{ width: '300px', marginTop: '20px' }}
+                            id={`username`}
+                            label="Username"
+                            variant="outlined"
+                            required
+                            size="small"
+                            value={username}
+                            onChange={usernameChangeHandler}
+                        />
 
-                <TextField
-                    sx={{ width: '300px', marginTop: '20px' }}
-                    id={`username`}
-                    label="Username"
-                    variant="outlined"
-                    required
-                    size="small"
-                    value={username}
-                    onChange={usernameChangeHandler}
-                />
+                        <TextField
+                            sx={{ width: '300px', marginTop: '20px' }}
+                            id={`email`}
+                            label="Email"
+                            variant="outlined"
+                            value={email}
+                            size="small"
+                            required
+                            helperText={emailErrorText}
+                            onChange={emailChangeHandler}
+                        />
 
-                <TextField
-                    sx={{ width: '300px', marginTop: '20px' }}
-                    id={`email`}
-                    label="Email"
-                    variant="outlined"
-                    value={email}
-                    size="small"
-                    required
-                    helperText={emailErrorText}
-                    onChange={emailChangeHandler}
-                />
+                        <TextField
+                            sx={{ width: '300px', marginTop: '20px' }}
+                            id={`password`}
+                            label="Password"
+                            type="password"
+                            variant="outlined"
+                            value={password}
+                            size="small"
+                            required
+                            onChange={passwordChangeHandler}
+                        />
 
-                <TextField
-                    sx={{ width: '300px', marginTop: '20px' }}
-                    id={`password`}
-                    label="Password"
-                    type="password"
-                    variant="outlined"
-                    value={password}
-                    size="small"
-                    required
-                    // helperText={password === "" && wasPasswordModified ? 'Empty field!' : ' '}
-                    onChange={passwordChangeHandler}
-                />
+                        <TextField
+                            sx={{ width: '300px', marginTop: '20px' }}
+                            id={`confirm_password`}
+                            label="Confirm password"
+                            type="password"
+                            variant="outlined"
+                            value={confirmPassword}
+                            size="small"
+                            required
+                            helperText={passwordErrorText}
+                            onChange={confirmPasswordChangeHandler}
+                        />
 
-                <TextField
-                    sx={{ width: '300px', marginTop: '20px' }}
-                    id={`confirm_password`}
-                    label="Confirm password"
-                    type="password"
-                    variant="outlined"
-                    value={confirmPassword}
-                    size="small"
-                    required
-                    helperText={passwordErrorText}
-                    onChange={confirmPasswordChangeHandler}
-                />
+                        <Button
+                            sx={{ marginTop: '20px' }}
+                            variant="outlined"
+                            type="submit"
+                            onClick={(event) => registerUser(event)}
+                        >
+                            Sign up
+                        </Button>
 
-                <Button
-                    sx={{ marginTop: '20px' }}
-                    variant="outlined"
-                    type="submit"
-                    onClick={(event) => registerUser(event)}
-                >
-                    Sign up
-                </Button>
+                    </FormControl>
 
-            </FormControl>
+                    <Snackbar
+                        open={alertOpenState}
+                        autoHideDuration={4000}
+                        onClose={onAlertSnackbarClose}>
+                        <Alert
+                            onClose={onAlertSnackbarClose}
+                            severity="error"
+                            variant="filled"
+                            sx={{ width: '100%' }}>
+                            {alertMessage}
+                        </Alert>
+                    </Snackbar>
+                </div >
+        }
 
-            <Snackbar
-                open={alertOpenState}
-                autoHideDuration={4000}
-                onClose={onAlertSnackbarClose}>
-                <Alert
-                    onClose={onAlertSnackbarClose}
-                    severity="error"
-                    variant="filled"
-                    sx={{ width: '100%' }}>
-                    {alertMessage}
-                </Alert>
-            </Snackbar>
-        </div >
+        </>
     );
+
 };
 
 export default Signup;

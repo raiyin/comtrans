@@ -50,27 +50,27 @@ namespace UserMicroservice.Services.UserServices
             return response;
         }
 
-        public async Task<ServiceResponse<GetUserDto>> GetUserById(int id)
+        public async Task<ServiceResponse<UserDto>> GetUserById(int id)
         {
-            var response = new ServiceResponse<GetUserDto>();
+            var response = new ServiceResponse<UserDto>();
 
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
-            response.Data = _mapper.Map<GetUserDto>(user);
+            response.Data = _mapper.Map<UserDto>(user);
             response.Success = true;
             return response;
         }
 
-        public async Task<ServiceResponse<List<GetUserDto>>> GetUserList()
+        public async Task<ServiceResponse<List<UserDto>>> GetUserList()
         {
-            var response = new ServiceResponse<List<GetUserDto>>();
+            var response = new ServiceResponse<List<UserDto>>();
             var users = await _dbContext.Users.ToListAsync();
-            response.Data = users.Select(u => _mapper.Map<GetUserDto>(u)).ToList();
+            response.Data = users.Select(u => _mapper.Map<UserDto>(u)).ToList();
             return response;
         }
 
-        public async Task<ServiceResponse<GetUserDto>> UpdateUser(UpdateUserDto updatedUser)
+        public async Task<ServiceResponse<UserDto>> UpdateUser(UpdateUserDto updatedUser)
         {
-            ServiceResponse<GetUserDto> response = new ServiceResponse<GetUserDto>();
+            ServiceResponse<UserDto> response = new ServiceResponse<UserDto>();
 
             try
             {
@@ -85,7 +85,7 @@ namespace UserMicroservice.Services.UserServices
                 user.Enabled = updatedUser.Enabled;
 
                 await _dbContext.SaveChangesAsync();
-                response.Data = _mapper.Map<GetUserDto>(user);
+                response.Data = _mapper.Map<UserDto>(user);
             }
             catch (Exception ex)
             {

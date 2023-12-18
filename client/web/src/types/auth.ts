@@ -1,14 +1,31 @@
-import { IUser } from "../models/IUser";
+export interface IUser {
+    username: string;
+    email: string;
+    isActivated: boolean;
+}
 
-export interface AuthState {
+export interface UserDto {
+    data: IUser,
+    success: boolean;
+    message: string;
+}
+
+export enum AuthState {
+    Anonym = 1,
+    Signingup = 2,
+    Signedup = 3,
+    Loggingin = 4,
+    Loggedin = 5
+}
+
+export interface AuthenticationState {
     currentUser: IUser;
-    isAuth: boolean;
-    isProccessing: boolean;
+    authState: AuthState;
 }
 
 export interface CheckAuthState {
-    isProccessing: boolean;
-    isAuth: boolean;
+    currentUser: IUser;
+    authState: AuthState;
 }
 
 export interface RegisterData {
@@ -25,11 +42,10 @@ export interface LoginData {
 export enum AuthActionTypes {
     REGISTER = 'REGISTER',
     AUTH_PROCCESSING = 'AUTH_PROCCESSING',
-    REGISTER_SUCCESS = 'REGISTER_SUCCESS',
+    REGISTRATION_SUCCESS = 'REGISTRATION_SUCCESS',
     REGISTRATION_ERROR = 'REGISTRATION_ERROR',
     ACTIVATE = 'ACTIVATE',
-    LOGIN_SUCCESS = 'LOGIN_SUCCESS',
-    LOGIN_ERROR = 'LOGIN_ERROR',
+    LOGGED_IN = 'LOGGED_IN',
     LOGOUT = 'LOGOUT',
     CHECKAUTH = 'CHECKAUTH'
 }
@@ -37,7 +53,7 @@ export enum AuthActionTypes {
 
 interface AuthProccessingAction {
     type: AuthActionTypes.AUTH_PROCCESSING;
-    payload: boolean;
+    payload: AuthState;
 }
 
 interface RegisterAction {
@@ -50,27 +66,23 @@ interface RegistrationErrorAction {
 }
 
 interface RegistrationSuccessAction {
-    type: AuthActionTypes.REGISTER_SUCCESS;
+    type: AuthActionTypes.REGISTRATION_SUCCESS;
     payload: AuthState;
 }
 
 interface ActiveteAction {
     type: AuthActionTypes.ACTIVATE;
-    payload: AuthState;
+    payload: AuthenticationState;
 }
 
 interface LoginSaccessAction {
-    type: AuthActionTypes.LOGIN_SUCCESS;
-    payload: AuthState;
-}
-
-interface LoginErrorAction {
-    type: AuthActionTypes.LOGIN_ERROR;
+    type: AuthActionTypes.LOGGED_IN;
+    payload: AuthenticationState;
 }
 
 interface LogoutAction {
     type: AuthActionTypes.LOGOUT;
-    payload: AuthState;
+    payload: AuthenticationState;
 }
 
 interface CheckAuthAction {
@@ -84,7 +96,6 @@ export type AuthAction =
     | RegistrationErrorAction
     | RegistrationSuccessAction
     | LoginSaccessAction
-    | LoginErrorAction
     | ActiveteAction
     | LogoutAction
     | CheckAuthAction;
