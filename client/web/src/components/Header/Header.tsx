@@ -10,6 +10,8 @@ import Stack from '@mui/material/Stack';
 import { deepOrange, deepPurple } from '@mui/material/colors';
 import AuthBar from '../AuthBar/AuthBar';
 import { AuthState } from '../../types/auth';
+import cl from './header.module.scss';
+import { staticBlock } from '@babel/types';
 
 
 const Header = () => {
@@ -74,67 +76,66 @@ const Header = () => {
 
     return (
 
-        <header>
+        <ThemeProvider theme={darkTheme}
+        >
 
-            <ThemeProvider theme={darkTheme}>
+            <AppBar component="nav"
+                position="sticky"
+            >
+                <Toolbar>
 
-                <AppBar component="nav">
-                    <Toolbar>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        sx={{ mr: 2, display: { sm: 'none' } }}
+                    >
+                        <MenuIcon />
+                    </IconButton>
 
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            edge="start"
-                            onClick={handleDrawerToggle}
-                            sx={{ mr: 2, display: { sm: 'none' } }}
+                    <Typography
+                        variant="h6"
+                        component="div"
+                        sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+                    >
+                        COMTRANS
+                    </Typography>
+
+                    <Search>
+                        <SearchIconWrapper>
+                            <SearchIcon />
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            placeholder="Search…"
+                            inputProps={{ 'aria-label': 'search' }}
+                        />
+                    </Search>
+
+                    <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+                        <Button
+                            key={'contact'}
+                            sx={{ color: '#fff' }}
+                            onClick={() => navigate('/contact')}
                         >
-                            <MenuIcon />
-                        </IconButton>
-
-                        <Typography
-                            variant="h6"
-                            component="div"
-                            sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
-                        >
-                            COMTRANS
-                        </Typography>
-
-                        <Search>
-                            <SearchIconWrapper>
-                                <SearchIcon />
-                            </SearchIconWrapper>
-                            <StyledInputBase
-                                placeholder="Search…"
-                                inputProps={{ 'aria-label': 'search' }}
-                            />
-                        </Search>
-
-                        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
-                            <Button
-                                key={'contact'}
-                                sx={{ color: '#fff' }}
-                                onClick={() => navigate('/contact')}
-                            >
-                                Contact
-                            </Button>
-                        </Box>
+                            Contact
+                        </Button>
+                    </Box>
 
 
-                        {
-                            isAuth === AuthState.Loggedin ?
-                                <Avatar sx={{ bgcolor: deepOrange[500] }}>
-                                    {currentUser.username}
-                                </Avatar>
-                                :
-                                <AuthBar />
-                        }
+                    {
+                        isAuth === AuthState.Loggedin ?
+                            <Avatar sx={{ bgcolor: deepOrange[500] }}>
+                                {currentUser.username}
+                            </Avatar>
+                            :
+                            <AuthBar />
+                    }
 
 
-                    </Toolbar>
-                </AppBar>
-            </ThemeProvider>
-
-        </header>
+                </Toolbar>
+            </AppBar>
+        </ThemeProvider>
 
     );
 };

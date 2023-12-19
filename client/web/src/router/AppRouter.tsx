@@ -4,6 +4,7 @@ import Home from "../pages/Home/Home";
 import Signup from "../pages/Signup/Signup";
 import ActivationSuccess from '../pages/Activation/ActivationSuccess';
 import ActivationNeeded from '../pages/Activation/ActivationNeeded';
+import NotFound from '../pages/NotFound/NotFound';
 
 const AppRouter = () => {
     return (
@@ -13,6 +14,7 @@ const AppRouter = () => {
             <Route path="/signup" element={<Signup />} />
             <Route path="/activation/success" element={<ActivationSuccess />} />
             <Route path="/activation/needed" element={<ActivationNeeded />} />
+            <Route path="*" element={<NotFound />} />
         </Routes>
     );
 };
