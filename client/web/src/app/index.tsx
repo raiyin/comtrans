@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import './index.scss';
-import AppRouter from '../router/AppRouter';
+import AppRouter from 'pages';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import { useActions } from '../hooks/useActions';

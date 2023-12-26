@@ -1,6 +1,6 @@
 import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
-import cl from './signup.module.scss';
+import styles from './styles.module.scss';
 import { Alert, Button, CircularProgress, FormControl, Snackbar, TextField } from '@mui/material';
 import validateEmail from '../../utils/email';
 import { AuthState, RegisterData } from '../../types/auth';
@@ -121,13 +121,13 @@ const Signup = () => {
             {
                 authState === AuthState.Signingup
                     ?
-                    <div className={cl['signup']} >
+                    <div className={styles['signup']} >
                         <CircularProgress variant="indeterminate" />
                     </div>
                     :
-                    <div className={cl['signup']} >
+                    <div className={styles['signup']} >
 
-                        <FormControl className={cl['signup-form']}
+                        <FormControl className={styles['signup-form']}
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -137,7 +137,7 @@ const Signup = () => {
                             }}
                         >
 
-                            <span className={cl['signup-form__header']}>
+                            <span className={styles['signup-form__header']}>
                                 Welcome
                             </span>
 

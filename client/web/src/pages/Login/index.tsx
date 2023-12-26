@@ -1,5 +1,5 @@
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
-import cl from './login.module.scss';
+import styles from './styles.module.scss';
 import { Alert, Button, CircularProgress, FormControl, Snackbar, TextField } from '@mui/material';
 import { AuthState, LoginData } from '../../types/auth';
 import { useActions } from '../../hooks/useActions';
@@ -72,13 +72,13 @@ const Login = () => {
             {
                 authState === AuthState.Loggingin ?
 
-                    <div className={cl['login']} >
+                    <div className={styles['login']} >
                         <CircularProgress variant="indeterminate" />
                     </div>
                     :
-                    <div className={cl['login']} >
+                    <div className={styles['login']} >
 
-                        <FormControl className={cl['login-form']}
+                        <FormControl className={styles['login-form']}
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -88,7 +88,7 @@ const Login = () => {
                             }}
                         >
 
-                            <span className={cl['login-form__header']}>
+                            <span className={styles['login-form__header']}>
                                 Welcome
                             </span>
 

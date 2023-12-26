@@ -1,5 +1,5 @@
 import React from 'react'
-import cl from './notfound.module.scss';
+import styles from './styles.module.scss';
 import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router';
 
@@ -9,11 +9,11 @@ const NotFound = () => {
     const navigate = useNavigate();
 
     return (
-        <section className={cl['notfound']}>
-            <div className={cl['notfound-code']}>
+        <section className={styles['notfound']}>
+            <div className={styles['notfound-code']}>
                 404
             </div>
-            <div className={cl["notfound-description"]}>
+            <div className={styles["notfound-description"]}>
                 <span>Sorry, this page</span>
                 <span>isn't available!</span>
 

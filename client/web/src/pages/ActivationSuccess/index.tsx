@@ -1,4 +1,4 @@
-import cl from './activationsuccess.module.scss';
+import styles from './styles.module.scss';
 import { Link } from '@mui/material';
 import { Navigate } from 'react-router';
 import { AuthState } from '../../types/auth';
@@ -10,12 +10,12 @@ const ActivationSuccess = () => {
 
     return (
 
-        <div className={cl['activation_success']} >
+        <div className={styles['activation_success']} >
 
             {authState === AuthState.Loggedin && (
                 <Navigate to="/" replace={true} />
             )}
-            <div className={cl['success-message']}>
+            <div className={styles['success-message']}>
                 <h2>
                     Your account was activated successfully!!!
                 </h2>
