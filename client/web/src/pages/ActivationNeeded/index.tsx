@@ -1,6 +1,6 @@
 import { Navigate } from 'react-router';
 import styles from './styles.module.scss';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useTypedSelector } from '../../shared/api/store/hooks/useTypedSelector';
 import { AuthState } from 'shared/api';
 
 

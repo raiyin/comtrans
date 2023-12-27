@@ -1,8 +1,8 @@
 import React, { ChangeEvent, SyntheticEvent, useState } from 'react';
 import styles from './styles.module.scss';
 import { Alert, Button, CircularProgress, FormControl, Snackbar, TextField } from '@mui/material';
-import { useActions } from '../../hooks/useActions';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useActions } from '../../shared/api/store/hooks/useActions';
+import { useTypedSelector } from '../../shared/api/store/hooks/useTypedSelector';
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import { AuthState, LoginData } from 'shared/api';

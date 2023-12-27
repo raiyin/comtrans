@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from './styles.module.scss';
-import Sidebar from '../../components/Sidebar/Sidebar';
-import Map from '../../components/Map/Map';
+import Sidebar from '../../widgets/Sidebar/Sidebar';
+import Map from '../../widgets/Map/Map';
 
 const Home = () => {
     return (

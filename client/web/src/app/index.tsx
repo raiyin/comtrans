@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import './index.scss';
 import AppRouter from 'pages';
-import Header from '../components/Header/Header';
-import Footer from '../components/Footer/Footer';
-import { useActions } from '../hooks/useActions';
+import Header from '../widgets/Header/Header';
+import Footer from '../widgets/Footer/Footer';
+import { useActions } from '../shared/api/store/hooks/useActions';
 
 
 function App() {

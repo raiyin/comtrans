@@ -1,7 +1,7 @@
 import styles from './styles.module.scss';
 import { Link } from '@mui/material';
 import { Navigate } from 'react-router';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useTypedSelector } from '../../shared/api/store/hooks/useTypedSelector';
 import { AuthState } from 'shared/api';
 
 const ActivationSuccess = () => {

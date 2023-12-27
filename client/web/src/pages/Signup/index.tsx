@@ -3,8 +3,8 @@ import { Navigate, useNavigate } from "react-router-dom";
 import styles from './styles.module.scss';
 import { Alert, Button, CircularProgress, FormControl, Snackbar, TextField } from '@mui/material';
 import validateEmail from '../../utils/email';
-import { useActions } from '../../hooks/useActions';
-import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { useActions } from '../../shared/api/store/hooks/useActions';
+import { useTypedSelector } from '../../shared/api/store/hooks/useTypedSelector';
 import { AuthState, RegisterData } from 'shared/api';
 
 
