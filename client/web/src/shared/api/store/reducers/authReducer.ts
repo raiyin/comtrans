@@ -1,4 +1,5 @@
-import { AuthAction, AuthActionTypes, AuthState, AuthenticationState } from '../../types/auth';
+import { AuthAction, AuthActionTypes} from '../auth';
+import { AuthState, AuthenticationState } from '../models';
 
 const initialState: AuthenticationState = {
     currentUser: {

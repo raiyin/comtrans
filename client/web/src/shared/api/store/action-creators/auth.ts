@@ -1,6 +1,7 @@
-import AuthService from "../../services/AuthService";
-import { AuthAction, AuthActionTypes, RegisterData, LoginData, AuthState, AuthenticationState, UserDto, IUser } from "../../types/auth";
+import AuthService from "../../http/AuthService";
+import { AuthAction, AuthActionTypes } from "../auth";
 import { Dispatch } from 'redux';
+import { AuthState, AuthenticationState, IUser, LoginData, RegisterData } from "../models";
 
 export const register = (registerData: RegisterData) => {
     return async (dispatch: Dispatch<AuthAction>) => {

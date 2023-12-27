@@ -1,7 +1,6 @@
 import axios from "axios";
-import { AuthResponse } from "../models/response/AuthResponse";
 import { API_URL } from "shared/config";
-
+import { AuthResponse } from "./AuthenticationResponse";
 
 const $api = axios.create({
     withCredentials: false,
@@ -35,3 +34,4 @@ $api.interceptors.response.use((config) => {
 }));
 
 export default $api;
+export * from './AuthenticationResponse'

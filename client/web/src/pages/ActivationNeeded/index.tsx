@@ -1,7 +1,7 @@
 import { Navigate } from 'react-router';
 import styles from './styles.module.scss';
-import { AuthState } from '../../types/auth';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { AuthState } from 'shared/api';
 
 
 const ActivationSuccess = () => {

@@ -2,16 +2,12 @@ import { useState } from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import { AppBar, Box, Button, IconButton, InputBase, ThemeProvider, Toolbar, Typography, alpha, createTheme, styled } from '@mui/material';
-import { Navigate, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
-import { deepOrange, deepPurple } from '@mui/material/colors';
+import { deepOrange } from '@mui/material/colors';
 import AuthBar from '../AuthBar/AuthBar';
-import { AuthState } from '../../types/auth';
-import cl from './header.module.scss';
-import { staticBlock } from '@babel/types';
+import { AuthState } from 'shared/api';
 
 
 const Header = () => {

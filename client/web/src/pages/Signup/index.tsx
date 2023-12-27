@@ -3,9 +3,9 @@ import { Navigate, useNavigate } from "react-router-dom";
 import styles from './styles.module.scss';
 import { Alert, Button, CircularProgress, FormControl, Snackbar, TextField } from '@mui/material';
 import validateEmail from '../../utils/email';
-import { AuthState, RegisterData } from '../../types/auth';
 import { useActions } from '../../hooks/useActions';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
+import { AuthState, RegisterData } from 'shared/api';
 
 
 const Signup = () => {

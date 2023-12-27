@@ -1,7 +1,7 @@
-import $api from "../http";
+import { UserDto } from "shared/api";
+import $api from ".";
 import { AxiosResponse } from 'axios';
-import { AuthResponse, LoginResponse } from "../models/response/AuthResponse";
-import { UserDto } from "../types/auth";
+import { AuthResponse, LoginResponse } from "./AuthenticationResponse";
 
 export default class AuthService {
 

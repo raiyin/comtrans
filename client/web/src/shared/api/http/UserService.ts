@@ -1,6 +1,6 @@
-import $api from "../http";
+import { UserDto } from "shared/api";
+import $api from ".";
 import { AxiosResponse } from 'axios';
-import { UserDto } from "../types/auth";
 
 export default class UserService {
 
