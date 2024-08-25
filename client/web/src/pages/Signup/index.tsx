@@ -1,7 +1,7 @@
 import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react';
 import { Navigate, useNavigate } from "react-router-dom";
 import styles from './styles.module.scss';
-import { Alert, Button, CircularProgress, FormControl, Snackbar, TextField } from '@mui/material';
+import { Alert, Button, CircularProgress, circularProgressClasses, FormControl, LinearProgress, linearProgressClasses, Snackbar, styled, TextField } from '@mui/material';
 import validateEmail from '../../utils/email';
 import { useActions } from '../../shared/api/store/hooks/useActions';
 import { useTypedSelector } from '../../shared/api/store/hooks/useTypedSelector';
@@ -9,6 +9,7 @@ import { AuthState, RegisterData } from 'shared/api';
 
 
 const Signup = () => {
+
 
     const {
         register
@@ -101,7 +102,7 @@ const Signup = () => {
         };
 
         await register(registerData);
-        console.log(JSON.stringify(authState))
+        console.log(JSON.stringify(authState));
 
         if (authState === AuthState.Signedup) {
             clearFields();
@@ -122,7 +123,21 @@ const Signup = () => {
                 authState === AuthState.Signingup
                     ?
                     <div className={styles['signup']} >
-                        <CircularProgress variant="indeterminate" />
+
+
+                        <>
+                            <svg width={0} height={0}>
+                                <defs>
+                                    <linearGradient id="my_gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                        <stop offset="0%" stopColor="#e01cd5" />
+                                        <stop offset="100%" stopColor="#1CB5E0" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <CircularProgress sx={{ 'svg circle': { stroke: 'url(#my_gradient)' } }} />
+                        </>
+
+
                     </div>
                     :
                     <div className={styles['signup']} >
@@ -217,7 +232,6 @@ const Signup = () => {
 
         </>
     );
-
 };
 
 export default Signup;
