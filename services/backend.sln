@@ -5,7 +5,11 @@ VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{14A4D50A-B640-4423-BFAB-1483CAD050A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserMicroservice", "UserMicroservice\UserMicroservice.csproj", "{6415390A-D4B4-42E3-8C2A-BC29A8C97D1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignInUp", "UserMicroservice\SignInUp.csproj", "{6415390A-D4B4-42E3-8C2A-BC29A8C97D1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Auth", "Auth\Auth.csproj", "{BFC4491F-F624-4680-BF1D-BF8CB6F6DCB8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gateway", "Gateway\Gateway.csproj", "{9C5BBC83-2377-41F3-97E6-14E51675B60A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +21,21 @@ Global
 		{6415390A-D4B4-42E3-8C2A-BC29A8C97D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6415390A-D4B4-42E3-8C2A-BC29A8C97D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6415390A-D4B4-42E3-8C2A-BC29A8C97D1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFC4491F-F624-4680-BF1D-BF8CB6F6DCB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFC4491F-F624-4680-BF1D-BF8CB6F6DCB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFC4491F-F624-4680-BF1D-BF8CB6F6DCB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFC4491F-F624-4680-BF1D-BF8CB6F6DCB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C5BBC83-2377-41F3-97E6-14E51675B60A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C5BBC83-2377-41F3-97E6-14E51675B60A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C5BBC83-2377-41F3-97E6-14E51675B60A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C5BBC83-2377-41F3-97E6-14E51675B60A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6415390A-D4B4-42E3-8C2A-BC29A8C97D1E} = {14A4D50A-B640-4423-BFAB-1483CAD050A6}
+		{BFC4491F-F624-4680-BF1D-BF8CB6F6DCB8} = {14A4D50A-B640-4423-BFAB-1483CAD050A6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FF6F806E-8E05-4C11-9345-308DA9FB509D}
